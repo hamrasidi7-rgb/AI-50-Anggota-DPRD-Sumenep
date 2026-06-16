@@ -298,12 +298,6 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
 
         {/* HERO */}
         <section className="pt-4 pb-1.5 text-center">
-          <h1
-            className="mb-3 font-extrabold leading-[1.08] tracking-[-0.5px] text-text-hi mx-auto uppercase"
-            style={{ maxWidth: '14ch', fontSize: 'clamp(13px, 2vw, 22px)' }}
-          >
-            AI 50 Anggota DPRD Sumenep
-          </h1>
           <p
             className="mx-auto max-w-[560px] leading-relaxed"
             style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', color: 'rgba(231,240,255,0.97)', textShadow: '0 1px 6px rgba(0,0,0,0.35)' }}
