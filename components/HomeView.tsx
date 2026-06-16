@@ -305,21 +305,7 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
       <div className="max-w-content mx-auto px-4 md:px-8 lg:px-12 pb-2">
 
         {/* HERO */}
-        <section className="pt-7 pb-1.5 text-center">
-          {/* Logo — elegant thin-ring frame */}
-          <div className="flex justify-center mb-5">
-            <div
-              className="rounded-full bg-white flex items-center justify-center"
-              style={{
-                width: 76, height: 76,
-                border: '1.5px solid rgba(212,175,55,0.45)',
-                boxShadow: '0 0 0 5px rgba(255,255,255,0.05), 0 14px 40px -12px rgba(0,0,0,0.55)',
-              }}
-            >
-              <Image src="/logo.jpeg" alt="Logo DPRD Kabupaten Sumenep" width={62} height={62} className="object-contain" />
-            </div>
-          </div>
-
+        <section className="pt-4 pb-1.5 text-center">
           <h1
             className="mb-3 font-extrabold leading-[1.08] tracking-[-0.5px] text-text-hi mx-auto"
             style={{ maxWidth: '14ch', fontSize: 'clamp(26px, 4vw, 44px)' }}
@@ -328,7 +314,7 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
           </h1>
           <p
             className="mx-auto max-w-[560px] leading-relaxed"
-            style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', color: 'rgba(231,240,255,0.88)' }}
+            style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', color: 'rgba(231,240,255,0.97)', textShadow: '0 1px 6px rgba(0,0,0,0.35)' }}
           >
             Silakan pilih Anggota DPRD untuk menyalurkan aspirasi Anda.
           </p>
