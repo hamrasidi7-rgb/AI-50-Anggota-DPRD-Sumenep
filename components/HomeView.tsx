@@ -263,8 +263,8 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
             >
               <Image src="/logo.jpeg" alt="Logo DPRD" width={36} height={36} className="object-contain" />
             </div>
-            {/* Desktop: satu baris | Mobile: dua baris */}
-            <div className="font-extrabold tracking-[0.2px] leading-[1.2]">
+            {/* Desktop: satu baris | Mobile: dua baris tengah */}
+            <div className="font-extrabold tracking-[0.2px] leading-[1.2] text-center md:text-left">
               <div className="text-[14px] md:text-[17px]">
                 <span className="text-white">Chat</span>
                 <span className="text-dp-red">AI</span>
@@ -277,17 +277,17 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
             </div>
           </div>
 
-          {/* Nav icons */}
+          {/* Nav icons: Search | Menu(paling kanan) */}
           <nav className="flex items-center gap-2 flex-shrink-0">
+            <IconBtn title="Cari">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,.85)" strokeWidth="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,.85)" strokeWidth="1.8" strokeLinecap="round"/></svg>
+            </IconBtn>
             <IconBtn title="Menu">
               <div className="flex flex-col gap-[3.5px] items-center">
                 {[0,1,2].map(i => (
                   <span key={i} className="block w-4 h-[1.8px] rounded-sm" style={{ background: 'rgba(231,240,255,0.85)' }} />
                 ))}
               </div>
-            </IconBtn>
-            <IconBtn title="Cari">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,.85)" strokeWidth="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,.85)" strokeWidth="1.8" strokeLinecap="round"/></svg>
             </IconBtn>
           </nav>
         </div>
@@ -299,8 +299,8 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
         {/* HERO */}
         <section className="pt-4 pb-1.5 text-center">
           <h1
-            className="mb-3 font-extrabold leading-[1.08] tracking-[-0.5px] text-text-hi mx-auto"
-            style={{ maxWidth: '14ch', fontSize: 'clamp(26px, 4vw, 44px)' }}
+            className="mb-3 font-extrabold leading-[1.08] tracking-[-0.5px] text-text-hi mx-auto uppercase"
+            style={{ maxWidth: '14ch', fontSize: 'clamp(13px, 2vw, 22px)' }}
           >
             AI 50 Anggota DPRD Sumenep
           </h1>
