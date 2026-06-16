@@ -14,7 +14,7 @@ export interface Message {
 }
 
 export const INTRO =
-  'Selamat datang. Silakan pilih Anggota DPRD untuk menyalurkan aspirasi Anda terkait tugas, fungsi, aspirasi masyarakat, pokok pikiran, kegiatan, maupun informasi DPRD Kabupaten Sumenep.'
+  'Assalamu\'alaikum. Kaula siap menerima aspirasi, pertanyaan, atanapi keluhan Sampeyan. Monggo sampaikan, insyaAllah kaula usahakan diteruskan ka pihak terkait.'
 
 export const REPLIES = [
   'Terima kasih atas aspirasi yang Bapak/Ibu sampaikan. Persoalan ini akan saya catat dan saya teruskan dalam rapat {komisi} untuk ditindaklanjuti bersama mitra kerja terkait.',

@@ -1,8 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import Image from 'next/image'
-import { INTRO, REPLIES, type Member, type Message } from '@/lib/data'
+import { INTRO, type Member, type Message } from '@/lib/data'
 
 interface Props {
   member: Member
@@ -12,49 +11,58 @@ interface Props {
 export default function ChatView({ member, onBack }: Props) {
   const [messages, setMessages] = useState<Message[]>([{ role: 'persona', text: INTRO }])
   const [input, setInput]       = useState('')
-  const scrollRef   = useRef<HTMLDivElement>(null)
-  const replyTimer  = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const memberRef   = useRef(member)
-  memberRef.current = member
+  const [typing, setTyping]     = useState(false)
+  const scrollRef  = useRef<HTMLDivElement>(null)
+  const abortRef   = useRef<AbortController | null>(null)
 
   // Reset conversation when member changes
   useEffect(() => {
-    if (replyTimer.current) clearTimeout(replyTimer.current)
+    if (abortRef.current) abortRef.current.abort()
     setMessages([{ role: 'persona', text: INTRO }])
     setInput('')
+    setTyping(false)
   }, [member.id])
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom when messages/typing change
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
-  }, [messages])
+  }, [messages, typing])
 
   // Cleanup on unmount
   useEffect(() => {
-    return () => { if (replyTimer.current) clearTimeout(replyTimer.current) }
+    return () => { if (abortRef.current) abortRef.current.abort() }
   }, [])
 
-  function send() {
+  async function send() {
     const text = input.trim()
-    if (!text) return
+    if (!text || typing) return
     setInput('')
-    setMessages(prev => {
-      const next = [...prev, { role: 'user' as const, text }]
-      if (replyTimer.current) clearTimeout(replyTimer.current)
-      replyTimer.current = setTimeout(() => {
-        const am       = memberRef.current
-        const userCount = next.filter(m => m.role === 'user').length
-        const idx      = (userCount - 1) % REPLIES.length
-        const reply    = REPLIES[idx]
-          .replace(/\{komisi\}/g, am.komisi)
-          .replace(/\{dapil\}/g,  am.dapil)
-          .replace(/\{name\}/g,   am.name)
-        setMessages(p => [...p, { role: 'persona', text: reply }])
-      }, 700)
-      return next
-    })
+
+    const next: Message[] = [...messages, { role: 'user', text }]
+    setMessages(next)
+    setTyping(true)
+
+    const ctrl = new AbortController()
+    abortRef.current = ctrl
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: next, member }),
+        signal: ctrl.signal,
+      })
+      const data = await res.json()
+      setMessages(prev => [...prev, { role: 'persona', text: data.text }])
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name !== 'AbortError') {
+        setMessages(prev => [...prev, { role: 'persona', text: 'Mator sakalangkong, coba beberapa saat lagi.' }])
+      }
+    } finally {
+      setTyping(false)
+    }
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -67,7 +75,6 @@ export default function ChatView({ member, onBack }: Props) {
       {/* ── HEADER ─────────────────────────────────────────── */}
       <header className="flex-shrink-0 bg-white" style={{ borderBottom: '1px solid #E6EAF2', boxShadow: '0 1px 0 rgba(11,37,64,0.02)' }}>
         <div className="flex items-center gap-3 px-4 md:px-7 lg:px-8 py-3">
-          {/* Back */}
           <button
             onClick={onBack}
             className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer bg-white"
@@ -78,7 +85,6 @@ export default function ChatView({ member, onBack }: Props) {
             </svg>
           </button>
 
-          {/* Avatar */}
           <div
             className="avatar-grad w-[46px] h-[46px] flex-shrink-0 rounded-full flex items-center justify-center text-white font-extrabold text-base"
             style={{ border: '1.5px solid rgba(212,175,55,0.4)' }}
@@ -86,7 +92,6 @@ export default function ChatView({ member, onBack }: Props) {
             {member.ini}
           </div>
 
-          {/* Name + meta */}
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <span className="font-bold text-[15.5px] text-[#0B2540] truncate">{member.name}</span>
@@ -106,12 +111,8 @@ export default function ChatView({ member, onBack }: Props) {
       </header>
 
       {/* ── MESSAGES ───────────────────────────────────────── */}
-      <div
-        ref={scrollRef}
-        className="scroll-y flex-1 overflow-y-auto px-4 md:px-7 lg:px-8 py-6"
-      >
+      <div ref={scrollRef} className="scroll-y flex-1 overflow-y-auto px-4 md:px-7 lg:px-8 py-6">
         <div className="max-w-chat mx-auto flex flex-col gap-4">
-          {/* Date chip */}
           <div className="text-center mb-1">
             <span className="text-[11.5px] text-[#8A97AB] bg-[#E9EDF4] px-3 py-1 rounded-full">
               Hari ini
@@ -121,6 +122,8 @@ export default function ChatView({ member, onBack }: Props) {
           {messages.map((msg, i) => (
             <MessageBubble key={i} msg={msg} ini={member.ini} />
           ))}
+
+          {typing && <TypingBubble ini={member.ini} />}
         </div>
       </div>
 
@@ -143,11 +146,13 @@ export default function ChatView({ member, onBack }: Props) {
             onKeyDown={onKeyDown}
             placeholder="Tulis aspirasi Anda…"
             className="placeholder-chat flex-1 min-w-0 border-none outline-none bg-transparent text-[14.5px] font-[inherit] text-[#0B2540] py-2.5"
+            disabled={typing}
             autoFocus
           />
           <button
             onClick={send}
-            className="flex-shrink-0 h-[42px] px-5 rounded-[14px] text-white font-bold text-sm flex items-center gap-1.5 border-0 cursor-pointer"
+            disabled={typing || !input.trim()}
+            className="flex-shrink-0 h-[42px] px-5 rounded-[14px] text-white font-bold text-sm flex items-center gap-1.5 border-0 cursor-pointer disabled:opacity-50"
             style={{ background: 'linear-gradient(135deg,#1E5AA8,#0B3C6F)' }}
           >
             Kirim
@@ -169,9 +174,7 @@ function MessageBubble({ msg, ini }: { msg: Message; ini: string }) {
   if (msg.role === 'persona') {
     return (
       <div className="self-start flex gap-2.5 items-end max-w-[84%]">
-        <div
-          className="avatar-grad w-[34px] h-[34px] flex-shrink-0 rounded-full flex items-center justify-center text-white font-bold text-xs"
-        >
+        <div className="avatar-grad w-[34px] h-[34px] flex-shrink-0 rounded-full flex items-center justify-center text-white font-bold text-xs">
           {ini}
         </div>
         <div
@@ -199,6 +202,39 @@ function MessageBubble({ msg, ini }: { msg: Message; ini: string }) {
         }}
       >
         {msg.text}
+      </div>
+    </div>
+  )
+}
+
+// ── Typing indicator ──────────────────────────────────────────────────────────
+function TypingBubble({ ini }: { ini: string }) {
+  return (
+    <div className="self-start flex gap-2.5 items-end">
+      <div className="avatar-grad w-[34px] h-[34px] flex-shrink-0 rounded-full flex items-center justify-center text-white font-bold text-xs">
+        {ini}
+      </div>
+      <div
+        className="bg-white px-[18px] py-4 flex gap-1.5 items-center"
+        style={{
+          border: '1px solid #E6EAF2',
+          borderRadius: '6px 20px 20px 20px',
+          boxShadow: '0 10px 24px -16px rgba(11,37,64,0.25)',
+        }}
+      >
+        {[0, 1, 2].map(i => (
+          <span
+            key={i}
+            className="block w-2 h-2 rounded-full bg-[#B0BAC9]"
+            style={{ animation: `typing-dot 1.2s ease-in-out ${i * 0.2}s infinite` }}
+          />
+        ))}
+        <style>{`
+          @keyframes typing-dot {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
+          }
+        `}</style>
       </div>
     </div>
   )
