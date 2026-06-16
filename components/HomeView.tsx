@@ -254,16 +254,16 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
         className="sticky top-0 z-30 backdrop-blur-[18px]"
         style={{ background: 'rgba(7,24,44,0.62)', borderBottom: '1px solid rgba(255,255,255,0.10)' }}
       >
-        <div className="max-w-content mx-auto px-4 md:px-8 lg:px-12 py-3 flex items-center justify-between gap-4">
+        <div className="max-w-content mx-auto px-4 md:px-8 lg:px-12 py-3 flex items-center gap-3">
           {/* Logo + logotype */}
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             <div
               className="w-[42px] h-[42px] flex-shrink-0 rounded-full bg-white flex items-center justify-center overflow-hidden"
               style={{ border: `1.5px solid ${A_STRONG}`, boxShadow: '0 5px 14px -5px rgba(0,0,0,0.45)' }}
             >
               <Image src="/logo.jpeg" alt="Logo DPRD" width={36} height={36} className="object-contain" />
             </div>
-            {/* Desktop: satu baris | Mobile: dua baris rata kiri */}
+            {/* Desktop: satu baris | Mobile: dua baris */}
             <div className="font-extrabold tracking-[0.2px] leading-[1.2]">
               <div className="text-[14px] md:text-[17px]">
                 <span className="text-white">Chat</span>
@@ -279,23 +279,15 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
 
           {/* Nav icons */}
           <nav className="flex items-center gap-2 flex-shrink-0">
-            <IconBtn title="Cari">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,.85)" strokeWidth="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,.85)" strokeWidth="1.8" strokeLinecap="round"/></svg>
-            </IconBtn>
-            <IconBtn title="Notifikasi" badge>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="11" r="6.5" stroke="rgba(231,240,255,.85)" strokeWidth="1.8"/><line x1="9" y1="20" x2="15" y2="20" stroke="rgba(231,240,255,.85)" strokeWidth="1.8" strokeLinecap="round"/></svg>
-            </IconBtn>
-            <button
-              title="Profil"
-              className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-white font-bold text-[13px] cursor-pointer border border-white/20"
-              style={{ background: 'linear-gradient(140deg,#1E5AA8,#0B3C6F)' }}
-            >WS</button>
             <IconBtn title="Menu">
               <div className="flex flex-col gap-[3.5px] items-center">
                 {[0,1,2].map(i => (
                   <span key={i} className="block w-4 h-[1.8px] rounded-sm" style={{ background: 'rgba(231,240,255,0.85)' }} />
                 ))}
               </div>
+            </IconBtn>
+            <IconBtn title="Cari">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,.85)" strokeWidth="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,.85)" strokeWidth="1.8" strokeLinecap="round"/></svg>
             </IconBtn>
           </nav>
         </div>
