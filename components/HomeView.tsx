@@ -340,7 +340,7 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
         >
           <div className="flex items-end justify-between mb-3.5 gap-3">
             <h2 className="m-0 font-bold text-text-hi tracking-[-0.2px]" style={{ fontSize: 'clamp(19px, 2.2vw, 24px)' }}>
-              Sorotan Anggota
+              SOROTAN ANGGOTA
             </h2>
             <span className="text-[12.5px] whitespace-nowrap" style={{ color: 'rgba(231,240,255,0.5)' }}>
               Geser untuk lihat lainnya →
