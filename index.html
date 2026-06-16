@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatAI DPRD Sumenep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body, #app { height: 100%; }
+    body { font-family: Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+
+    .scroll-y::-webkit-scrollbar { width: 8px; }
+    .scroll-y::-webkit-scrollbar-thumb { background: rgba(120,140,170,.30); border-radius: 8px; }
+    .scroll-y::-webkit-scrollbar-track { background: transparent; }
+
+    .no-scrollbar { scrollbar-width: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+
+    select { -webkit-appearance: none; appearance: none; }
+    select option { color: #0B2540; }
+
+    ::placeholder { color: rgba(231,240,255,.55); }
+    .chat-input::placeholder { color: #94A3B8; }
+
+    /* Slider card hover */
+    .slider-card {
+      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+      cursor: pointer;
+    }
+    .slider-card:hover {
+      transform: translateY(-7px) scale(1.02);
+      border-color: rgba(212,175,55,.6) !important;
+      box-shadow: 0 34px 74px -28px rgba(212,175,55,.34) !important;
+    }
+
+    /* Grid card hover */
+    .grid-card {
+      transition: transform .24s ease, border-color .24s ease, background .24s ease;
+      cursor: pointer;
+    }
+    .grid-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(212,175,55,.6) !important;
+      background: rgba(255,255,255,.09) !important;
+    }
+    .grid-cta {
+      transition: background .2s ease, color .2s ease, border-color .2s ease;
+      cursor: pointer;
+    }
+    .grid-cta:hover {
+      background: linear-gradient(135deg,#D4AF37,#C49B2A) !important;
+      color: #06223f !important;
+      border-color: transparent !important;
+    }
+
+    /* Responsive: container-width based (standard CSS media queries) */
+    @media (min-width: 1100px) {
+      .r-hpad  { padding-left: 48px; padding-right: 48px; }
+      .r-h1    { font-size: 44px; }
+      .r-h2    { font-size: 24px; }
+      .r-sub   { font-size: 18px; }
+      .r-search{ height: 66px; }
+      .r-grid  { grid-template-columns: repeat(4,minmax(0,1fr)); gap: 20px; }
+      .r-info  { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .r-card  { width: 300px; }
+      .r-av    { width: 112px; height: 112px; font-size: 27px; }
+      .r-chpad { padding-left: 32px; padding-right: 32px; }
+    }
+    @media (min-width: 760px) and (max-width: 1099px) {
+      .r-hpad  { padding-left: 32px; padding-right: 32px; }
+      .r-h1    { font-size: 34px; }
+      .r-h2    { font-size: 22px; }
+      .r-sub   { font-size: 17px; }
+      .r-search{ height: 62px; }
+      .r-grid  { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+      .r-info  { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .r-card  { width: 280px; }
+      .r-av    { width: 104px; height: 104px; font-size: 24px; }
+      .r-chpad { padding-left: 28px; padding-right: 28px; }
+    }
+    @media (max-width: 759px) {
+      .r-hpad  { padding-left: 18px; padding-right: 18px; }
+      .r-h1    { font-size: 26px; }
+      .r-h2    { font-size: 19px; }
+      .r-sub   { font-size: 15px; }
+      .r-search{ height: 54px; }
+      .r-grid  { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+      .r-info  { grid-template-columns: repeat(1,minmax(0,1fr)); }
+      .r-card  { width: 228px; }
+      .r-av    { width: 90px; height: 90px; font-size: 20px; }
+      .r-chpad { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app" style="width:100%;height:100%;position:relative;"></div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+
+const LOGO = 'design_handoff_chatai_dprd_sumenep/Logo_DPRD_Kabupaten_Sumene.jpeg';
+const ACCENT = '#D4AF37';
+const A_SOFT   = 'rgba(212,175,55,.14)';
+const A_BORDER = 'rgba(212,175,55,.35)';
+const A_STRONG = 'rgba(212,175,55,.6)';
+
+const INTRO = 'Selamat datang. Silakan pilih Anggota DPRD untuk menyalurkan aspirasi Anda terkait tugas, fungsi, aspirasi masyarakat, pokok pikiran, kegiatan, maupun informasi DPRD Kabupaten Sumenep.';
+
+const REPLIES = [
+  'Terima kasih atas aspirasi yang Bapak/Ibu sampaikan. Persoalan ini akan saya catat dan saya teruskan dalam rapat {komisi} untuk ditindaklanjuti bersama mitra kerja terkait.',
+  'Saya mengapresiasi masukan ini. Sebagai wakil dari {dapil}, saya berkomitmen mengawal usulan tersebut melalui pokok-pokok pikiran DPRD agar masuk dalam pembahasan anggaran.',
+  'Aspirasi seperti ini sangat penting bagi kami. Mohon sertakan lokasi dan rincian kebutuhannya agar dapat kami verifikasi di lapangan dan kami perjuangkan pada masa sidang berikutnya.',
+  'Baik, akan saya sampaikan kepada Pemerintah Kabupaten melalui mekanisme rapat dengar pendapat. Partisipasi masyarakat seperti inilah yang kami harapkan demi kemajuan Sumenep.'
+];
+
+const ASSIGN = {
+  23:['Pimpinan','Ketua DPRD'],       50:['Pimpinan','Wakil Ketua DPRD'],
+  44:['Pimpinan','Wakil Ketua DPRD'], 26:['Pimpinan','Wakil Ketua DPRD'],
+  41:['Komisi I','Ketua Komisi I'],   20:['Komisi I','Wakil Ketua Komisi I'],
+  39:['Komisi I','Sekretaris Komisi I'],
+   9:['Komisi I',''], 25:['Komisi I',''], 42:['Komisi I',''],
+   4:['Komisi I',''], 22:['Komisi I',''],  7:['Komisi I',''],
+  13:['Komisi II','Ketua Komisi II'], 16:['Komisi II','Wakil Ketua Komisi II'],
+  17:['Komisi II','Sekretaris Komisi II'],
+   2:['Komisi II',''], 35:['Komisi II',''], 38:['Komisi II',''],
+  12:['Komisi II',''], 24:['Komisi II',''], 11:['Komisi II',''],
+  30:['Komisi II',''],  1:['Komisi II',''], 32:['Komisi II',''], 37:['Komisi II',''],
+  28:['Komisi III','Ketua Komisi III'], 45:['Komisi III','Wakil Ketua Komisi III'],
+   5:['Komisi III','Sekretaris Komisi III'],
+   6:['Komisi III',''], 43:['Komisi III',''], 27:['Komisi III',''],
+  46:['Komisi III',''], 48:['Komisi III',''], 10:['Komisi III',''],
+  40:['Komisi III',''],  8:['Komisi III',''], 15:['Komisi III',''],
+  14:['Komisi III',''], 49:['Komisi III',''],
+  36:['Komisi IV','Ketua Komisi IV'], 21:['Komisi IV','Wakil Ketua Komisi IV'],
+  31:['Komisi IV','Sekretaris Komisi IV'],
+  19:['Komisi IV',''], 47:['Komisi IV',''],  3:['Komisi IV',''],
+  34:['Komisi IV',''], 18:['Komisi IV',''], 33:['Komisi IV',''], 29:['Komisi IV','']
+};
+
+const RAW = [
+  ['Rasiidi','PKB','Dapil 1'],
+  ['Agus Hariyanto','Gerindra','Dapil 1'],
+  ['Nia Kurnia','PDI-P','Dapil 1'],
+  ['Sutan Hady Tjahyadi','PDI-P','Dapil 1'],
+  ['Wiwid Harjo Yudanto','PKS','Dapil 1'],
+  ['Musahwi','PAN','Dapil 1'],
+  ['Hairul Anam','PPP','Dapil 1'],
+  ['Akhmadi Yazid','PKB','Dapil 2'],
+  ['Holik','Gerindra','Dapil 2'],
+  ['Eka Bahas Nur Ardiansyah','PDI-P','Dapil 2'],
+  ['Salahuddin','PDI-P','Dapil 2'],
+  ['Samsiyadi','NasDem','Dapil 2'],
+  ['Faisal Muhlis','PAN','Dapil 2'],
+  ['Afrian Mukhlash','Demokrat','Dapil 2'],
+  ['Eksan','PKB','Dapil 3'],
+  ['Irwan Hayat','PKB','Dapil 3'],
+  ['Abd. Rahman','PDI-P','Dapil 3'],
+  ['M. Ramzi','Hanura','Dapil 3'],
+  ['Siti Hosna','PAN','Dapil 3'],
+  ['Akhmad Jazuli','Demokrat','Dapil 3'],
+  ["Moh. Asy'ari Motkhar",'PPP','Dapil 3'],
+  ['Muhammad Mirza Khumaini Hamid','PKB','Dapil 4'],
+  ['H. Zainal (Arifin)','PDI-P','Dapil 4'],
+  ['Ersat','NasDem','Dapil 4'],
+  ['Hairul Anwar','PAN','Dapil 4'],
+  ['Indra Wahyudi','Demokrat','Dapil 4'],
+  ['Abd. Rahman','PPP','Dapil 4'],
+  ['M. Muhri','PKB','Dapil 5'],
+  ['Virzannida','PKB','Dapil 5'],
+  ['Endi','PDI-P','Dapil 5'],
+  ['Afrilia Wahyuni','NasDem','Dapil 5'],
+  ['Moh. Fendi','Demokrat','Dapil 5'],
+  ['Sami Oeddin','PKB','Dapil 6'],
+  ['Umar','PDI-P','Dapil 6'],
+  ['Gunaifi Syarif Arrodi','PAN','Dapil 6'],
+  ['Mulyadi','Demokrat','Dapil 6'],
+  ['Masdawi','Demokrat','Dapil 6'],
+  ['Juhari','PPP','Dapil 6'],
+  ['Saipur Rahman','PKB','Dapil 7'],
+  ['Hosnan','PDI-P','Dapil 7'],
+  ['Darul Hasyim Fath','PDI-P','Dapil 7'],
+  ['Ahmad Juhairi','NasDem','Dapil 7'],
+  ["Mas'ud Ali",'PPP','Dapil 7'],
+  ['Dulsiam','PKB','Dapil 8'],
+  ['Wahyudi','PDI-P','Dapil 8'],
+  ["Muta'em",'NasDem','Dapil 8'],
+  ['Syamsul Bahri','PKS','Dapil 8'],
+  ['Badrul Aini','PBB','Dapil 8'],
+  ['Mohammad Hanafi','Demokrat','Dapil 8'],
+  ['M. Syukri','PPP','Dapil 8']
+];
+
+function initials(name) {
+  const p = name.replace(/\./g,'').split(' ').filter(Boolean);
+  return ((p[0][0]||'') + (p[1] ? p[1][0] : (p[0][1]||''))).toUpperCase();
+}
+
+const MEMBERS = RAW.map((r, i) => {
+  const id = i + 1;
+  const a = ASSIGN[id] || ['',''];
+  return { id, name: r[0], ini: initials(r[0]), fraksi: r[1], komisi: a[0], dapil: r[2], jabatan: a[1] };
+});
+
+const SOROTAN_IDS = [23, 50, 44, 26, 41, 13, 28, 36];
+const SOROTAN = SOROTAN_IDS.map(id => MEMBERS.find(m => m.id === id));
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+
+const S = {
+  view: 'home',
+  q: '', fraksi: '', komisi: '', dapil: '',
+  activeMemberId: null,
+  messages: [],
+  input: '',
+  slide: 0,
+  paused: false,
+  timer: null,
+  replyTimer: null
+};
+
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function activeMember() {
+  return MEMBERS.find(m => m.id === S.activeMemberId) || MEMBERS[2];
+}
+
+function filtered() {
+  const q = S.q.toLowerCase();
+  return MEMBERS.filter(m =>
+    (!S.fraksi || m.fraksi === S.fraksi) &&
+    (!S.komisi || m.komisi === S.komisi) &&
+    (!S.dapil  || m.dapil  === S.dapil)  &&
+    (!q || m.name.toLowerCase().includes(q))
+  );
+}
+
+function cardPx() {
+  const w = window.innerWidth;
+  return w >= 1100 ? 300 : w >= 760 ? 280 : 228;
+}
+
+const CARET = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23E7C766' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`;
+
+// ─── HTML BUILDERS ───────────────────────────────────────────────────────────
+
+function sliderCardHTML(m) {
+  return `
+<div class="slider-card r-card" data-id="${m.id}"
+  style="flex:0 0 auto;padding:24px 22px;border-radius:24px;
+         background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);
+         backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+         box-shadow:0 26px 60px -34px rgba(0,0,0,.8);">
+  <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px;">
+    <div class="r-av" style="border-radius:50%;
+         background:linear-gradient(140deg,#0B3C6F 0%,#1E5AA8 52%,#D4AF37 130%);
+         display:flex;align-items:center;justify-content:center;
+         color:#fff;font-weight:800;
+         border:2px solid rgba(212,175,55,.5);
+         box-shadow:0 14px 30px -12px rgba(0,0,0,.6);">${esc(m.ini)}</div>
+    <div>
+      <div style="font-weight:700;font-size:16.5px;color:#F4F8FF;line-height:1.25;">${esc(m.name)}</div>
+      <div style="font-size:12px;color:#EBDDAE;margin-top:3px;min-height:14px;">${esc(m.jabatan)}</div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;">
+      <span style="padding:4px 11px;border-radius:999px;background:${A_SOFT};border:1px solid ${A_BORDER};color:#EBDDAE;font-size:11.5px;font-weight:600;">${esc(m.fraksi)}</span>
+      <span style="padding:4px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(231,240,255,.82);font-size:11.5px;font-weight:600;">${esc(m.komisi)}</span>
+      <span style="padding:4px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(231,240,255,.82);font-size:11.5px;font-weight:600;">${esc(m.dapil)}</span>
+    </div>
+    <button style="width:100%;margin-top:4px;height:42px;border:none;border-radius:13px;
+                   background:linear-gradient(135deg,#D4AF37,#C49B2A);color:#06223f;
+                   font-weight:700;font-size:14px;font-family:inherit;cursor:pointer;
+                   box-shadow:0 10px 22px -10px rgba(212,175,55,.7);
+                   display:flex;align-items:center;justify-content:center;gap:7px;">
+      💬 Mulai Chat
+    </button>
+  </div>
+</div>`;
+}
+
+function gridCardHTML(m) {
+  return `
+<div class="grid-card" data-id="${m.id}"
+  style="padding:18px;border-radius:20px;
+         background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);
+         backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);">
+  <div style="display:flex;gap:13px;align-items:center;">
+    <div style="width:54px;height:54px;flex:0 0 auto;border-radius:50%;
+                background:linear-gradient(140deg,#0B3C6F 0%,#1E5AA8 52%,#D4AF37 135%);
+                display:flex;align-items:center;justify-content:center;
+                color:#fff;font-weight:800;font-size:17px;
+                border:1.5px solid rgba(212,175,55,.45);">${esc(m.ini)}</div>
+    <div style="min-width:0;">
+      <div style="font-weight:700;font-size:14.5px;color:#F4F8FF;line-height:1.25;
+                  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(m.name)}</div>
+      <div style="font-size:11.5px;color:#EBDDAE;margin-top:2px;
+                  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(m.fraksi)} · ${esc(m.dapil)}</div>
+    </div>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:13px;">
+    <span style="padding:3px 9px;border-radius:999px;
+                 background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);
+                 color:rgba(231,240,255,.78);font-size:11px;font-weight:600;">${esc(m.komisi)}</span>
+  </div>
+  <button class="grid-cta"
+    style="width:100%;margin-top:13px;height:38px;border-radius:11px;
+           background:rgba(212,175,55,.12);border:1px solid ${A_BORDER};
+           color:#EBDDAE;font-weight:700;font-size:13px;font-family:inherit;
+           display:flex;align-items:center;justify-content:center;gap:6px;">
+    💬 Mulai Chat
+  </button>
+</div>`;
+}
+
+function selectHTML(id, val, opts) {
+  const optHTML = opts.map(([v,l]) =>
+    `<option value="${esc(v)}"${v===val?' selected':''}>${esc(l)}</option>`
+  ).join('');
+  return `
+<select id="${id}"
+  style="flex:1 1 150px;min-width:0;height:46px;border-radius:13px;
+         border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);
+         color:#F4F8FF;font-size:14px;font-family:inherit;font-weight:500;
+         padding:0 36px 0 16px;cursor:pointer;outline:none;
+         background-image:${CARET};background-repeat:no-repeat;background-position:right 14px center;">
+  ${optHTML}
+</select>`;
+}
+
+function msgHTML(msg, am) {
+  if (msg.role === 'persona') {
+    return `
+<div style="align-self:flex-start;display:flex;gap:11px;align-items:flex-end;max-width:84%;">
+  <div style="width:34px;height:34px;flex:0 0 auto;border-radius:50%;
+              background:linear-gradient(140deg,#0B3C6F,#1E5AA8 60%,#D4AF37 140%);
+              display:flex;align-items:center;justify-content:center;
+              color:#fff;font-weight:700;font-size:12px;">${esc(am.ini)}</div>
+  <div style="background:#fff;border:1px solid #E6EAF2;
+              border-radius:6px 20px 20px 20px;
+              padding:14px 18px;font-size:14.5px;line-height:1.55;color:#1A2A40;
+              box-shadow:0 10px 24px -16px rgba(11,37,64,.25);">${esc(msg.text)}</div>
+</div>`;
+  }
+  return `
+<div style="align-self:flex-end;max-width:84%;">
+  <div style="background:linear-gradient(135deg,#1E5AA8,#0B3C6F);color:#fff;
+              border-radius:20px 6px 20px 20px;
+              padding:14px 18px;font-size:14.5px;line-height:1.55;
+              box-shadow:0 12px 26px -16px rgba(11,60,111,.6);">${esc(msg.text)}</div>
+</div>`;
+}
+
+// ─── RENDER HOME ─────────────────────────────────────────────────────────────
+
+function renderHome() {
+  const list = filtered();
+  const offset = S.slide * (cardPx() + 18);
+
+  return `
+<div id="home-view" class="scroll-y"
+  style="width:100%;height:100%;overflow-y:auto;color:#F4F8FF;
+         background:radial-gradient(1200px 620px at 82% -12%,rgba(30,90,168,.45),transparent 60%),
+                    radial-gradient(900px 520px at -8% 14%,rgba(212,175,55,.10),transparent 55%),
+                    linear-gradient(165deg,#0c3158 0%,#08213c 58%,#04162a 100%);">
+
+  <!-- HEADER -->
+  <header style="position:sticky;top:0;z-index:30;
+                 backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+                 background:rgba(7,24,44,.62);border-bottom:1px solid rgba(255,255,255,.10);">
+    <div class="r-hpad" style="max-width:1440px;margin:0 auto;padding-top:13px;padding-bottom:13px;
+                               display:flex;align-items:center;justify-content:space-between;gap:16px;">
+      <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+        <div style="width:42px;height:42px;flex:0 0 auto;border-radius:50%;background:#fff;
+                    border:1.5px solid ${A_STRONG};display:flex;align-items:center;justify-content:center;
+                    overflow:hidden;box-shadow:0 5px 14px -5px rgba(0,0,0,.45);">
+          <img src="${LOGO}" alt="Logo DPRD" style="width:36px;height:36px;object-fit:contain;">
+        </div>
+        <div style="font-weight:800;letter-spacing:.2px;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+          <span style="color:#fff;">Chat</span><span style="color:#E5484D;">AI</span><span style="color:rgba(233,240,255,.92);font-weight:700;">&nbsp;DPRD SUMENEP</span>
+        </div>
+      </div>
+      <nav style="display:flex;align-items:center;gap:8px;flex:0 0 auto;">
+        <button title="Cari" style="width:38px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,.85)" stroke-width="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,.85)" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <button title="Notifikasi" style="position:relative;width:38px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="11" r="6.5" stroke="rgba(231,240,255,.85)" stroke-width="1.8"/><line x1="9" y1="20" x2="15" y2="20" stroke="rgba(231,240,255,.85)" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span style="position:absolute;top:7px;right:8px;width:7px;height:7px;border-radius:50%;background:${ACCENT};"></span>
+        </button>
+        <button title="Profil" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:linear-gradient(140deg,#1E5AA8,#0B3C6F);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;">WS</button>
+        <button title="Menu" style="width:38px;height:38px;border-radius:11px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);cursor:pointer;display:flex;flex-direction:column;gap:3.5px;align-items:center;justify-content:center;">
+          <span style="display:block;width:16px;height:1.8px;border-radius:2px;background:rgba(231,240,255,.85);"></span>
+          <span style="display:block;width:16px;height:1.8px;border-radius:2px;background:rgba(231,240,255,.85);"></span>
+          <span style="display:block;width:16px;height:1.8px;border-radius:2px;background:rgba(231,240,255,.85);"></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="r-hpad" style="max-width:1440px;margin:0 auto;padding-bottom:8px;">
+
+    <!-- HERO -->
+    <section style="padding:44px 0 6px;text-align:center;">
+      <div style="display:flex;justify-content:center;margin-bottom:20px;">
+        <div style="width:88px;height:88px;border-radius:50%;background:#fff;
+                    display:flex;align-items:center;justify-content:center;
+                    box-shadow:0 22px 50px -18px rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.55);">
+          <img src="${LOGO}" alt="Logo DPRD Kabupaten Sumenep" style="width:74px;height:74px;object-fit:contain;">
+        </div>
+      </div>
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 15px;border-radius:999px;
+                  background:${A_SOFT};border:1px solid ${A_BORDER};color:#EBDDAE;font-size:12px;font-weight:600;letter-spacing:.4px;">
+        <span style="width:6px;height:6px;border-radius:50%;background:${ACCENT};display:inline-block;"></span>
+        PERSONA DIGITAL RESMI · DPRD KABUPATEN SUMENEP
+      </div>
+      <h1 class="r-h1" style="margin:20px auto 12px;line-height:1.08;font-weight:800;
+                               letter-spacing:-.5px;color:#F4F8FF;max-width:14ch;">
+        AI 50 Anggota DPRD Sumenep
+      </h1>
+      <p class="r-sub" style="margin:0 auto;max-width:560px;line-height:1.5;color:rgba(231,240,255,.70);">
+        Silakan pilih Anggota DPRD untuk menyalurkan aspirasi Anda.
+      </p>
+      <div style="margin:28px auto 0;max-width:680px;position:relative;">
+        <span style="position:absolute;left:22px;top:50%;transform:translateY(-50%);pointer-events:none;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,.6)" stroke-width="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,.6)" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <input id="q-input" class="r-search" value="${esc(S.q)}" placeholder="Cari nama Anggota DPRD..."
+          style="width:100%;border-radius:20px;border:1px solid rgba(255,255,255,.16);
+                 background:rgba(255,255,255,.08);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+                 color:#fff;font-size:16px;font-family:inherit;padding:0 22px 0 52px;
+                 box-shadow:0 22px 55px -24px rgba(0,0,0,.7);outline:none;display:block;box-sizing:border-box;">
+      </div>
+    </section>
+
+    <!-- SLIDER -->
+    <section id="slider-section" style="margin-top:38px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;gap:12px;">
+        <h2 class="r-h2" style="margin:0;font-weight:700;color:#F4F8FF;letter-spacing:-.2px;">Sorotan Anggota</h2>
+        <span style="font-size:12.5px;color:rgba(231,240,255,.5);white-space:nowrap;">Geser untuk lihat lainnya →</span>
+      </div>
+      <div style="overflow:hidden;">
+        <div id="slider-track" class="no-scrollbar"
+          style="display:flex;gap:18px;
+                 transform:translateX(-${offset}px);
+                 transition:transform .65s cubic-bezier(.22,.61,.36,1);
+                 will-change:transform;">
+          ${SOROTAN.map(m => sliderCardHTML(m)).join('')}
+        </div>
+      </div>
+    </section>
+
+    <!-- FULL GRID -->
+    <section style="margin-top:50px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+        <h2 class="r-h2" style="margin:0;font-weight:700;color:#F4F8FF;letter-spacing:-.2px;">Daftar Lengkap Anggota</h2>
+        <span id="result-count" style="font-size:13px;color:rgba(231,240,255,.55);">${list.length} dari 50 anggota</span>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px;">
+        ${selectHTML('f-fraksi', S.fraksi, [
+          ['','Semua Fraksi'],['PKB','PKB'],['PDI-P','PDI-P'],['Gerindra','Gerindra'],
+          ['NasDem','NasDem'],['PAN','PAN'],['PPP','PPP'],['Demokrat','Demokrat'],
+          ['PKS','PKS'],['Hanura','Hanura'],['PBB','PBB']
+        ])}
+        ${selectHTML('f-komisi', S.komisi, [
+          ['','Semua Komisi'],['Pimpinan','Pimpinan DPRD'],
+          ['Komisi I','Komisi I'],['Komisi II','Komisi II'],['Komisi III','Komisi III'],['Komisi IV','Komisi IV']
+        ])}
+        ${selectHTML('f-dapil', S.dapil, [
+          ['','Semua Dapil'],
+          ['Dapil 1','Dapil 1'],['Dapil 2','Dapil 2'],['Dapil 3','Dapil 3'],['Dapil 4','Dapil 4'],
+          ['Dapil 5','Dapil 5'],['Dapil 6','Dapil 6'],['Dapil 7','Dapil 7'],['Dapil 8','Dapil 8']
+        ])}
+        <button id="btn-reset"
+          style="flex:0 0 auto;height:46px;padding:0 18px;border-radius:13px;
+                 border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);
+                 color:rgba(231,240,255,.7);font-size:13.5px;font-weight:600;
+                 font-family:inherit;cursor:pointer;">Reset</button>
+      </div>
+
+      <div id="member-grid" class="r-grid"
+        style="display:grid;">
+        ${list.map(m => gridCardHTML(m)).join('')}
+      </div>
+      <div id="empty-state" style="display:${list.length===0?'block':'none'};
+           text-align:center;padding:50px 20px;color:rgba(231,240,255,.55);font-size:15px;">
+        Tidak ada anggota yang cocok dengan pencarian Anda.
+      </div>
+    </section>
+
+    <!-- LATEST INFO -->
+    <section style="margin-top:54px;">
+      <h2 class="r-h2" style="margin:0 0 16px;font-weight:700;color:#F4F8FF;letter-spacing:-.2px;">📰 Informasi DPRD Terbaru</h2>
+      <div class="r-info" style="display:grid;gap:14px;">
+        <div style="padding:20px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);">
+          <span style="display:inline-block;padding:3px 10px;border-radius:7px;background:${A_SOFT};color:#EBDDAE;font-size:11px;font-weight:700;letter-spacing:.5px;">AGENDA</span>
+          <div style="margin-top:12px;font-weight:600;font-size:14.5px;line-height:1.4;color:#F4F8FF;">Rapat Paripurna Penyampaian LKPJ Bupati Tahun 2025</div>
+          <div style="margin-top:10px;font-size:12px;color:rgba(231,240,255,.5);">18 Juni 2026 · Ruang Sidang Utama</div>
+        </div>
+        <div style="padding:20px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);">
+          <span style="display:inline-block;padding:3px 10px;border-radius:7px;background:rgba(30,90,168,.22);color:#A9C8F0;font-size:11px;font-weight:700;letter-spacing:.5px;">BERITA</span>
+          <div style="margin-top:12px;font-weight:600;font-size:14.5px;line-height:1.4;color:#F4F8FF;">DPRD Sumenep Dorong Percepatan Infrastruktur Kepulauan</div>
+          <div style="margin-top:10px;font-size:12px;color:rgba(231,240,255,.5);">14 Juni 2026 · Humas DPRD</div>
+        </div>
+        <div style="padding:20px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);">
+          <span style="display:inline-block;padding:3px 10px;border-radius:7px;background:rgba(229,72,77,.18);color:#F1A7A9;font-size:11px;font-weight:700;letter-spacing:.5px;">PENGUMUMAN</span>
+          <div style="margin-top:12px;font-weight:600;font-size:14.5px;line-height:1.4;color:#F4F8FF;">Jadwal Reses Masa Sidang II Tahun 2026</div>
+          <div style="margin-top:10px;font-size:12px;color:rgba(231,240,255,.5);">10 Juni 2026 · Sekretariat Dewan</div>
+        </div>
+        <div style="padding:20px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.13);">
+          <span style="display:inline-block;padding:3px 10px;border-radius:7px;background:rgba(255,255,255,.10);color:rgba(231,240,255,.8);font-size:11px;font-weight:700;letter-spacing:.5px;">SIDANG</span>
+          <div style="margin-top:12px;font-weight:600;font-size:14.5px;line-height:1.4;color:#F4F8FF;">Pembahasan Raperda Retribusi Daerah</div>
+          <div style="margin-top:10px;font-size:12px;color:rgba(231,240,255,.5);">06 Juni 2026 · Komisi II</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="margin-top:54px;padding:24px 0 36px;border-top:1px solid rgba(255,255,255,.10);
+                   display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:38px;height:38px;flex:0 0 auto;border-radius:50%;background:#fff;
+                    display:flex;align-items:center;justify-content:center;overflow:hidden;">
+          <img src="${LOGO}" alt="Logo DPRD" style="width:32px;height:32px;object-fit:contain;">
+        </div>
+        <div style="font-size:12.5px;color:rgba(231,240,255,.55);line-height:1.5;">
+          © 2026 Sekretariat DPRD Kabupaten Sumenep<br>
+          Jl. Trunojoyo No. 163, Sumenep, Jawa Timur
+        </div>
+      </div>
+      <div style="font-size:13px;color:rgba(231,240,255,.7);">
+        Dipersembahkan oleh <span style="color:#fff;font-weight:700;">mataGen</span><span style="color:#E5484D;font-weight:700;">.ai</span>
+      </div>
+    </footer>
+  </div>
+</div>`;
+}
+
+// ─── RENDER CHAT ─────────────────────────────────────────────────────────────
+
+function renderChat() {
+  const am = activeMember();
+  return `
+<div id="chat-view"
+  style="width:100%;height:100%;display:flex;flex-direction:column;background:#F3F5F9;color:#0B2540;">
+
+  <!-- HEADER -->
+  <header style="flex:0 0 auto;background:#fff;border-bottom:1px solid #E6EAF2;box-shadow:0 1px 0 rgba(11,37,64,.02);">
+    <div class="r-chpad" style="display:flex;align-items:center;gap:13px;padding-top:12px;padding-bottom:12px;">
+      <button id="back-btn"
+        style="flex:0 0 auto;width:40px;height:40px;border-radius:12px;border:1px solid #E1E6F0;
+               background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 6l-6 6 6 6" stroke="#0B3C6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div style="width:46px;height:46px;flex:0 0 auto;border-radius:50%;
+                  background:linear-gradient(140deg,#0B3C6F 0%,#1E5AA8 52%,#D4AF37 135%);
+                  display:flex;align-items:center;justify-content:center;
+                  color:#fff;font-weight:800;font-size:16px;border:1.5px solid rgba(212,175,55,.4);">${esc(am.ini)}</div>
+      <div style="min-width:0;flex:1 1 auto;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-weight:700;font-size:15.5px;color:#0B2540;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(am.name)}</span>
+          <span style="flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;padding:2px 9px;
+                       border-radius:999px;background:rgba(11,60,111,.07);border:1px solid rgba(11,60,111,.12);
+                       font-size:11px;font-weight:600;color:#0B3C6F;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#1F9D55;display:inline-block;"></span>Persona Digital
+          </span>
+        </div>
+        <div style="font-size:12.5px;color:#5B6B82;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+          ${esc(am.fraksi)} · ${esc(am.komisi)} · ${esc(am.dapil)}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MESSAGES -->
+  <div id="chat-scroll" class="scroll-y" style="flex:1 1 auto;overflow-y:auto;padding:24px 32px;">
+    <div id="chat-inner" style="max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
+      <div style="text-align:center;margin-bottom:4px;">
+        <span style="font-size:11.5px;color:#8A97AB;background:#E9EDF4;padding:5px 12px;border-radius:999px;">Hari ini</span>
+      </div>
+      ${S.messages.map(m => msgHTML(m, am)).join('')}
+    </div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="r-chpad"
+    style="flex:0 0 auto;padding-top:14px;padding-bottom:18px;
+           background:linear-gradient(180deg,rgba(243,245,249,0),#F3F5F9 30%);
+           border-top:1px solid #E8ECF3;">
+    <div style="max-width:760px;margin:0 auto;display:flex;align-items:flex-end;gap:10px;
+                background:#fff;border:1px solid #E1E6F0;border-radius:22px;
+                padding:8px 8px 8px 18px;box-shadow:0 14px 36px -22px rgba(11,37,64,.35);">
+      <input id="chat-input" class="chat-input" value="${esc(S.input)}" placeholder="Tulis aspirasi Anda…"
+        style="flex:1 1 auto;min-width:0;border:none;outline:none;background:transparent;
+               font-size:14.5px;font-family:inherit;color:#0B2540;padding:9px 0;">
+      <button id="send-btn"
+        style="flex:0 0 auto;height:42px;padding:0 20px;border:none;border-radius:14px;
+               background:linear-gradient(135deg,#1E5AA8,#0B3C6F);color:#fff;
+               font-weight:700;font-size:14px;font-family:inherit;cursor:pointer;
+               display:flex;align-items:center;gap:7px;">Kirim
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div style="max-width:760px;margin:8px auto 0;text-align:center;font-size:11px;color:#9AA6B8;">
+      Persona Digital resmi · DPRD Kabupaten Sumenep — dioperasikan oleh mataGen.ai
+    </div>
+  </div>
+</div>`;
+}
+
+// ─── MOUNT / UNMOUNT ─────────────────────────────────────────────────────────
+
+function mount() {
+  const app = document.getElementById('app');
+  if (S.view === 'home') {
+    app.innerHTML = renderHome();
+    bindHome();
+    startSlider();
+  } else {
+    stopSlider();
+    app.innerHTML = renderChat();
+    bindChat();
+    scrollBottom();
+  }
+}
+
+// ─── HOME BINDINGS ────────────────────────────────────────────────────────────
+
+function bindHome() {
+  document.getElementById('q-input').addEventListener('input', e => {
+    S.q = e.target.value;
+    S.slide = 0;
+    updateGrid();
+  });
+
+  document.getElementById('f-fraksi').addEventListener('change', e => { S.fraksi = e.target.value; updateGrid(); });
+  document.getElementById('f-komisi').addEventListener('change', e => { S.komisi = e.target.value; updateGrid(); });
+  document.getElementById('f-dapil').addEventListener('change',  e => { S.dapil  = e.target.value; updateGrid(); });
+
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    S.q = ''; S.fraksi = ''; S.komisi = ''; S.dapil = '';
+    S.slide = 0;
+    mount();
+  });
+
+  const sliderSec = document.getElementById('slider-section');
+  sliderSec.addEventListener('mouseenter', () => { S.paused = true; });
+  sliderSec.addEventListener('mouseleave', () => { S.paused = false; });
+
+  bindCards();
+}
+
+function bindCards() {
+  document.querySelectorAll('.slider-card[data-id]').forEach(el => {
+    el.addEventListener('click', () => openChat(+el.dataset.id));
+  });
+  document.querySelectorAll('.grid-card[data-id]').forEach(el => {
+    el.addEventListener('click', () => openChat(+el.dataset.id));
+  });
+}
+
+function updateGrid() {
+  const list = filtered();
+  const grid = document.getElementById('member-grid');
+  const empty = document.getElementById('empty-state');
+  const count = document.getElementById('result-count');
+  if (!grid) return;
+  grid.innerHTML = list.map(m => gridCardHTML(m)).join('');
+  empty.style.display = list.length === 0 ? 'block' : 'none';
+  count.textContent = `${list.length} dari 50 anggota`;
+  document.querySelectorAll('.grid-card[data-id]').forEach(el => {
+    el.addEventListener('click', () => openChat(+el.dataset.id));
+  });
+}
+
+// ─── CHAT BINDINGS ────────────────────────────────────────────────────────────
+
+function bindChat() {
+  document.getElementById('back-btn').addEventListener('click', () => {
+    S.view = 'home';
+    mount();
+  });
+
+  const inp = document.getElementById('chat-input');
+  inp.addEventListener('input', e => { S.input = e.target.value; });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+  });
+  document.getElementById('send-btn').addEventListener('click', send);
+  inp.focus();
+}
+
+function send() {
+  const text = (S.input || '').trim();
+  if (!text) return;
+
+  S.messages.push({ role: 'user', text });
+  S.input = '';
+
+  const am = activeMember();
+  const inner = document.getElementById('chat-inner');
+  inner.insertAdjacentHTML('beforeend', msgHTML({ role: 'user', text }, am));
+  document.getElementById('chat-input').value = '';
+  scrollBottom();
+
+  clearTimeout(S.replyTimer);
+  S.replyTimer = setTimeout(() => {
+    const userCount = S.messages.filter(m => m.role === 'user').length;
+    const idx = (userCount - 1) % REPLIES.length;
+    let reply = REPLIES[idx]
+      .replace(/\{komisi\}/g, am.komisi)
+      .replace(/\{dapil\}/g, am.dapil)
+      .replace(/\{name\}/g, am.name);
+    S.messages.push({ role: 'persona', text: reply });
+    inner.insertAdjacentHTML('beforeend', msgHTML({ role: 'persona', text: reply }, am));
+    scrollBottom();
+  }, 700);
+}
+
+function scrollBottom() {
+  setTimeout(() => {
+    const el = document.getElementById('chat-scroll');
+    if (el) el.scrollTop = el.scrollHeight;
+  }, 60);
+}
+
+function openChat(id) {
+  S.view = 'chat';
+  S.activeMemberId = id;
+  S.messages = [{ role: 'persona', text: INTRO }];
+  S.input = '';
+  mount();
+}
+
+// ─── SLIDER ───────────────────────────────────────────────────────────────────
+
+function startSlider() {
+  stopSlider();
+  S.timer = setInterval(() => {
+    if (S.view !== 'home' || S.paused) return;
+    const px = cardPx();
+    const visible = Math.max(1, Math.floor(window.innerWidth / (px + 18)));
+    const max = Math.max(0, SOROTAN.length - visible);
+    if (max <= 0) return;
+    S.slide = S.slide >= max ? 0 : S.slide + 1;
+    const track = document.getElementById('slider-track');
+    if (track) track.style.transform = `translateX(-${S.slide * (px + 18)}px)`;
+  }, 3600);
+}
+
+function stopSlider() {
+  if (S.timer) { clearInterval(S.timer); S.timer = null; }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+mount();
+</script>
+</body>
+</html>

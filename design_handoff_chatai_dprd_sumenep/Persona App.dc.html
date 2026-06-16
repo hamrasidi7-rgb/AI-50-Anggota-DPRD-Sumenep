@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  .pa-input::placeholder{ color: rgba(231,240,255,0.55); }
+  .pa-chatinput::placeholder{ color:#94A3B8; }
+  .pa-scroll::-webkit-scrollbar{ width:8px; height:8px; }
+  .pa-scroll::-webkit-scrollbar-thumb{ background:rgba(120,140,170,0.30); border-radius:8px; }
+  .pa-scroll::-webkit-scrollbar-track{ background:transparent; }
+  .pa-x{ scrollbar-width:none; }
+  .pa-x::-webkit-scrollbar{ display:none; }
+  .pa-select{ -webkit-appearance:none; appearance:none; }
+  .pa-select option{ color:#0B2540; }
+</style>
+</helmet>
+<div ref="{{ rootRef }}" style="width:100%; height:100%; font-family:Inter,system-ui,sans-serif; position:relative; -webkit-font-smoothing:antialiased;">
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <div class="pa-scroll" style="width:100%; height:100%; overflow-y:auto; color:#F4F8FF; background:radial-gradient(1200px 620px at 82% -12%, rgba(30,90,168,0.45), transparent 60%), radial-gradient(900px 520px at -8% 14%, rgba(212,175,55,0.10), transparent 55%), linear-gradient(165deg,#0c3158 0%,#08213c 58%,#04162a 100%);">
+
+    <header style="position:sticky; top:0; z-index:30; backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); background:rgba(7,24,44,0.62); border-bottom:1px solid rgba(255,255,255,0.10);">
+      <div style="max-width:1440px; margin:0 auto; padding:13px {{ sz.hpad }}; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+        <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+          <div style="width:42px; height:42px; flex:0 0 auto; border-radius:50%; background:#fff; border:1.5px solid {{ aBorderStrong }}; display:flex; align-items:center; justify-content:center; overflow:hidden; box-shadow:0 5px 14px -5px rgba(0,0,0,0.45);"><img src="uploads/Logo_DPRD_Kabupaten_Sumene.jpeg" alt="Logo DPRD Sumenep" style="width:36px; height:36px; object-fit:contain;"></div>
+          <div style="font-weight:800; letter-spacing:0.2px; font-size:17px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+            <span style="color:#ffffff;">Chat</span><span style="color:#E5484D;">AI</span><span style="color:rgba(233,240,255,0.92); font-weight:700;">&nbsp;DPRD SUMENEP</span>
+          </div>
+        </div>
+        <nav style="display:flex; align-items:center; gap:8px; flex:0 0 auto;">
+          <button title="Cari" style="width:38px; height:38px; border-radius:11px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.06); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,0.85)" stroke-width="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,0.85)" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <button title="Notifikasi" style="position:relative; width:38px; height:38px; border-radius:11px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.06); cursor:pointer; display:flex; align-items:center; justify-content:center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="11" r="6.5" stroke="rgba(231,240,255,0.85)" stroke-width="1.8"/><line x1="9" y1="20" x2="15" y2="20" stroke="rgba(231,240,255,0.85)" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <span style="position:absolute; top:7px; right:8px; width:7px; height:7px; border-radius:50%; background:{{ accent }};"></span>
+          </button>
+          <button title="Profil" style="width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,0.18); background:linear-gradient(140deg,#1E5AA8,#0B3C6F); cursor:pointer; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:13px;">WS</button>
+          <button title="Menu" style="width:38px; height:38px; border-radius:11px; border:1px solid rgba(255,255,255,0.14); background:rgba(255,255,255,0.06); cursor:pointer; display:flex; flex-direction:column; gap:3.5px; align-items:center; justify-content:center;">
+            <span style="width:16px; height:1.8px; border-radius:2px; background:rgba(231,240,255,0.85);"></span>
+            <span style="width:16px; height:1.8px; border-radius:2px; background:rgba(231,240,255,0.85);"></span>
+            <span style="width:16px; height:1.8px; border-radius:2px; background:rgba(231,240,255,0.85);"></span>
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <div style="max-width:1440px; margin:0 auto; padding:0 {{ sz.hpad }} 8px;">
+
+      <section style="padding:44px 0 6px; text-align:center;">
+        <div style="display:flex; justify-content:center; margin-bottom:20px;">
+          <div style="width:88px; height:88px; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 22px 50px -18px rgba(0,0,0,0.65); border:1px solid rgba(255,255,255,0.55);"><img src="uploads/Logo_DPRD_Kabupaten_Sumene.jpeg" alt="Logo DPRD Kabupaten Sumenep" style="width:74px; height:74px; object-fit:contain;"></div>
+        </div>
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 15px; border-radius:999px; background:{{ aSoft }}; border:1px solid {{ aBorder }}; color:#EBDDAE; font-size:12px; font-weight:600; letter-spacing:0.4px;">
+          <span style="width:6px; height:6px; border-radius:50%; background:{{ accent }};"></span>PERSONA DIGITAL RESMI · DPRD KABUPATEN SUMENEP
+        </div>
+        <h1 style="margin:20px auto 12px; font-size:{{ sz.title }}; line-height:1.08; font-weight:800; letter-spacing:-0.5px; color:#F4F8FF; max-width:14ch;">AI 50 Anggota DPRD Sumenep</h1>
+        <p style="margin:0 auto; max-width:560px; font-size:{{ sz.sub }}; line-height:1.5; color:rgba(231,240,255,0.70);">Silakan pilih Anggota DPRD untuk menyalurkan aspirasi Anda.</p>
+
+        <div style="margin:28px auto 0; max-width:680px; position:relative;">
+          <span style="position:absolute; left:22px; top:50%; transform:translateY(-50%); pointer-events:none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,0.6)" stroke-width="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,0.6)" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <input class="pa-input" value="{{ q }}" onChange="{{ onSearch }}" placeholder="Cari nama Anggota DPRD..." style="width:100%; height:{{ sz.search }}; border-radius:20px; border:1px solid rgba(255,255,255,0.16); background:rgba(255,255,255,0.08); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); color:#fff; font-size:16px; font-family:inherit; padding:0 22px 0 52px; box-shadow:0 22px 55px -24px rgba(0,0,0,0.7); outline:none; box-sizing:border-box;">
+        </div>
+      </section>
+
+      <section onMouseEnter="{{ sliderEnter }}" onMouseLeave="{{ sliderLeave }}" style="margin-top:38px;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:14px; gap:12px;">
+          <h2 style="margin:0; font-size:{{ sz.h2 }}; font-weight:700; color:#F4F8FF; letter-spacing:-0.2px;">Sorotan Anggota</h2>
+          <span style="font-size:12.5px; color:rgba(231,240,255,0.5); white-space:nowrap;">Geser untuk lihat lainnya →</span>
+        </div>
+        <div style="overflow:hidden;">
+          <div style="display:flex; gap:18px; transform:{{ sliderTransform }}; transition:transform 0.65s cubic-bezier(.22,.61,.36,1); will-change:transform;">
+            <sc-for list="{{ sorotan }}" as="m" hint-placeholder-count="5">
+              <div onClick="{{ m.onChat }}" style="flex:0 0 auto; width:{{ sz.cardCss }}; cursor:pointer; padding:24px 22px; border-radius:24px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); box-shadow:0 26px 60px -34px rgba(0,0,0,0.8); transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease;" style-hover="transform:translateY(-7px) scale(1.02); border-color:{{ aBorderStrong }}; box-shadow:0 34px 74px -28px rgba(212,175,55,0.34);">
+                <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:13px;">
+                  <div style="width:{{ sz.sliderAv }}; height:{{ sz.sliderAv }}; border-radius:50%; background:linear-gradient(140deg,#0B3C6F 0%,#1E5AA8 52%,#D4AF37 130%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:27px; border:2px solid rgba(212,175,55,0.5); box-shadow:0 14px 30px -12px rgba(0,0,0,0.6);">{{ m.ini }}</div>
+                  <div>
+                    <div style="font-weight:700; font-size:16.5px; color:#F4F8FF; line-height:1.25;">{{ m.name }}</div>
+                    <div style="font-size:12px; color:#EBDDAE; margin-top:3px; min-height:14px;">{{ m.jabatan }}</div>
+                  </div>
+                  <div style="display:flex; flex-wrap:wrap; gap:6px; justify-content:center;">
+                    <span style="padding:4px 11px; border-radius:999px; background:{{ aSoft }}; border:1px solid {{ aBorder }}; color:#EBDDAE; font-size:11.5px; font-weight:600;">{{ m.fraksi }}</span>
+                    <span style="padding:4px 11px; border-radius:999px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14); color:rgba(231,240,255,0.82); font-size:11.5px; font-weight:600;">{{ m.komisi }}</span>
+                    <span style="padding:4px 11px; border-radius:999px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14); color:rgba(231,240,255,0.82); font-size:11.5px; font-weight:600;">{{ m.dapil }}</span>
+                  </div>
+                  <button style="width:100%; margin-top:4px; height:42px; border:none; border-radius:13px; background:{{ btnGrad }}; color:#06223f; font-weight:700; font-size:14px; font-family:inherit; cursor:pointer; box-shadow:0 10px 22px -10px rgba(212,175,55,0.7); display:flex; align-items:center; justify-content:center; gap:7px;">💬 Mulai Chat</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <section style="margin-top:50px;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:16px;">
+          <h2 style="margin:0; font-size:{{ sz.h2 }}; font-weight:700; color:#F4F8FF; letter-spacing:-0.2px;">Daftar Lengkap Anggota</h2>
+          <span style="font-size:13px; color:rgba(231,240,255,0.55);">{{ resultLabel }}</span>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+          <select class="pa-select" value="{{ fraksi }}" onChange="{{ onFraksi }}" style="flex:1 1 150px; min-width:0; height:46px; border-radius:13px; border:1px solid rgba(255,255,255,0.16); background:rgba(255,255,255,0.07); color:#F4F8FF; font-size:14px; font-family:inherit; font-weight:500; padding:0 16px; cursor:pointer; outline:none; background-image:url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;%23E7C766&quot; stroke-width=&quot;2.5&quot;><path d=&quot;M6 9l6 6 6-6&quot;/></svg>'); background-repeat:no-repeat; background-position:right 14px center;">
+            <option value="">Semua Fraksi</option>
+            <option value="PKB">PKB</option>
+            <option value="PDI-P">PDI-P</option>
+            <option value="Gerindra">Gerindra</option>
+            <option value="NasDem">NasDem</option>
+            <option value="PAN">PAN</option>
+            <option value="PPP">PPP</option>
+            <option value="Demokrat">Demokrat</option>
+            <option value="PKS">PKS</option>
+            <option value="Hanura">Hanura</option>
+            <option value="PBB">PBB</option>
+          </select>
+          <select class="pa-select" value="{{ komisi }}" onChange="{{ onKomisi }}" style="flex:1 1 150px; min-width:0; height:46px; border-radius:13px; border:1px solid rgba(255,255,255,0.16); background:rgba(255,255,255,0.07); color:#F4F8FF; font-size:14px; font-family:inherit; font-weight:500; padding:0 16px; cursor:pointer; outline:none; background-image:url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;%23E7C766&quot; stroke-width=&quot;2.5&quot;><path d=&quot;M6 9l6 6 6-6&quot;/></svg>'); background-repeat:no-repeat; background-position:right 14px center;">
+            <option value="">Semua Komisi</option>
+            <option value="Pimpinan">Pimpinan DPRD</option>
+            <option value="Komisi I">Komisi I</option>
+            <option value="Komisi II">Komisi II</option>
+            <option value="Komisi III">Komisi III</option>
+            <option value="Komisi IV">Komisi IV</option>
+          </select>
+          <select class="pa-select" value="{{ dapil }}" onChange="{{ onDapil }}" style="flex:1 1 150px; min-width:0; height:46px; border-radius:13px; border:1px solid rgba(255,255,255,0.16); background:rgba(255,255,255,0.07); color:#F4F8FF; font-size:14px; font-family:inherit; font-weight:500; padding:0 16px; cursor:pointer; outline:none; background-image:url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;12&quot; height=&quot;12&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;%23E7C766&quot; stroke-width=&quot;2.5&quot;><path d=&quot;M6 9l6 6 6-6&quot;/></svg>'); background-repeat:no-repeat; background-position:right 14px center;">
+            <option value="">Semua Dapil</option>
+            <option value="Dapil 1">Dapil 1</option>
+            <option value="Dapil 2">Dapil 2</option>
+            <option value="Dapil 3">Dapil 3</option>
+            <option value="Dapil 4">Dapil 4</option>
+            <option value="Dapil 5">Dapil 5</option>
+            <option value="Dapil 6">Dapil 6</option>
+            <option value="Dapil 7">Dapil 7</option>
+            <option value="Dapil 8">Dapil 8</option>
+          </select>
+          <button onClick="{{ clearFilters }}" style="flex:0 0 auto; height:46px; padding:0 18px; border-radius:13px; border:1px solid rgba(255,255,255,0.16); background:rgba(255,255,255,0.04); color:rgba(231,240,255,0.7); font-size:13.5px; font-weight:600; font-family:inherit; cursor:pointer;">Reset</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:{{ gridStyle }}; gap:{{ sz.gridGap }};">
+          <sc-for list="{{ list }}" as="m" hint-placeholder-count="8">
+            <div onClick="{{ m.onChat }}" style="cursor:pointer; padding:18px; border-radius:20px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.13); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); transition:transform .24s ease, border-color .24s ease, background .24s ease;" style-hover="transform:translateY(-4px); border-color:{{ aBorderStrong }}; background:rgba(255,255,255,0.09);">
+              <div style="display:flex; gap:13px; align-items:center;">
+                <div style="width:54px; height:54px; flex:0 0 auto; border-radius:50%; background:linear-gradient(140deg,#0B3C6F 0%,#1E5AA8 52%,#D4AF37 135%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:17px; border:1.5px solid rgba(212,175,55,0.45);">{{ m.ini }}</div>
+                <div style="min-width:0;">
+                  <div style="font-weight:700; font-size:14.5px; color:#F4F8FF; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ m.name }}</div>
+                  <div style="font-size:11.5px; color:#EBDDAE; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ m.fraksi }} · {{ m.dapil }}</div>
+                </div>
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:13px;">
+                <span style="padding:3px 9px; border-radius:999px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.13); color:rgba(231,240,255,0.78); font-size:11px; font-weight:600;">{{ m.komisi }}</span>
+              </div>
+              <button style="width:100%; margin-top:13px; height:38px; border:none; border-radius:11px; background:rgba(212,175,55,0.12); border:1px solid {{ aBorder }}; color:#EBDDAE; font-weight:700; font-size:13px; font-family:inherit; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;" style-hover="background:{{ btnGrad }}; color:#06223f; border-color:transparent;">💬 Mulai Chat</button>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center; padding:50px 20px; color:rgba(231,240,255,0.55); font-size:15px;">Tidak ada anggota yang cocok dengan pencarian Anda.</div>
+        </sc-if>
+      </section>
+
+      <section style="margin-top:54px;">
+        <h2 style="margin:0 0 16px; font-size:{{ sz.h2 }}; font-weight:700; color:#F4F8FF; letter-spacing:-0.2px;">📰 Informasi DPRD Terbaru</h2>
+        <div style="display:grid; grid-template-columns:{{ infoGrid }}; gap:14px;">
+          <div style="padding:20px; border-radius:18px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.13);">
+            <span style="display:inline-block; padding:3px 10px; border-radius:7px; background:{{ aSoft }}; color:#EBDDAE; font-size:11px; font-weight:700; letter-spacing:0.5px;">AGENDA</span>
+            <div style="margin-top:12px; font-weight:600; font-size:14.5px; line-height:1.4; color:#F4F8FF;">Rapat Paripurna Penyampaian LKPJ Bupati Tahun 2025</div>
+            <div style="margin-top:10px; font-size:12px; color:rgba(231,240,255,0.5);">18 Juni 2026 · Ruang Sidang Utama</div>
+          </div>
+          <div style="padding:20px; border-radius:18px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.13);">
+            <span style="display:inline-block; padding:3px 10px; border-radius:7px; background:rgba(30,90,168,0.22); color:#A9C8F0; font-size:11px; font-weight:700; letter-spacing:0.5px;">BERITA</span>
+            <div style="margin-top:12px; font-weight:600; font-size:14.5px; line-height:1.4; color:#F4F8FF;">DPRD Sumenep Dorong Percepatan Infrastruktur Kepulauan</div>
+            <div style="margin-top:10px; font-size:12px; color:rgba(231,240,255,0.5);">14 Juni 2026 · Humas DPRD</div>
+          </div>
+          <div style="padding:20px; border-radius:18px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.13);">
+            <span style="display:inline-block; padding:3px 10px; border-radius:7px; background:rgba(229,72,77,0.18); color:#F1A7A9; font-size:11px; font-weight:700; letter-spacing:0.5px;">PENGUMUMAN</span>
+            <div style="margin-top:12px; font-weight:600; font-size:14.5px; line-height:1.4; color:#F4F8FF;">Jadwal Reses Masa Sidang II Tahun 2026</div>
+            <div style="margin-top:10px; font-size:12px; color:rgba(231,240,255,0.5);">10 Juni 2026 · Sekretariat Dewan</div>
+          </div>
+          <div style="padding:20px; border-radius:18px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.13);">
+            <span style="display:inline-block; padding:3px 10px; border-radius:7px; background:rgba(255,255,255,0.10); color:rgba(231,240,255,0.8); font-size:11px; font-weight:700; letter-spacing:0.5px;">SIDANG</span>
+            <div style="margin-top:12px; font-weight:600; font-size:14.5px; line-height:1.4; color:#F4F8FF;">Pembahasan Raperda Retribusi Daerah</div>
+            <div style="margin-top:10px; font-size:12px; color:rgba(231,240,255,0.5);">06 Juni 2026 · Komisi II</div>
+          </div>
+        </div>
+      </section>
+
+      <footer style="margin-top:54px; padding:24px 0 36px; border-top:1px solid rgba(255,255,255,0.10); display:flex; flex-wrap:wrap; gap:14px; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="width:38px; height:38px; flex:0 0 auto; border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden;"><img src="uploads/Logo_DPRD_Kabupaten_Sumene.jpeg" alt="Logo DPRD Sumenep" style="width:32px; height:32px; object-fit:contain;"></div>
+          <div style="font-size:12.5px; color:rgba(231,240,255,0.55); line-height:1.5;">© 2026 Sekretariat DPRD Kabupaten Sumenep<br>Jl. Trunojoyo No. 163, Sumenep, Jawa Timur</div>
+        </div>
+        <div style="font-size:13px; color:rgba(231,240,255,0.7);">Dipersembahkan oleh <span style="color:#ffffff; font-weight:700;">mataGen</span><span style="color:#E5484D; font-weight:700;">.ai</span></div>
+      </footer>
+
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isChat }}" hint-placeholder-val="{{ false }}">
+  <div style="width:100%; height:100%; display:flex; flex-direction:column; background:#F3F5F9; color:#0B2540; min-height:520px;">
+
+    <header style="flex:0 0 auto; background:#ffffff; border-bottom:1px solid #E6EAF2; box-shadow:0 1px 0 rgba(11,37,64,0.02);">
+      <div style="display:flex; align-items:center; gap:13px; padding:12px {{ sz.chPad }};">
+        <button onClick="{{ back }}" style="flex:0 0 auto; width:40px; height:40px; border-radius:12px; border:1px solid #E1E6F0; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M14 6l-6 6 6 6" stroke="#0B3C6F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div style="width:46px; height:46px; flex:0 0 auto; border-radius:50%; background:linear-gradient(140deg,#0B3C6F 0%,#1E5AA8 52%,#D4AF37 135%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:16px; border:1.5px solid rgba(212,175,55,0.4);">{{ am.ini }}</div>
+        <div style="min-width:0; flex:1 1 auto;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-weight:700; font-size:15.5px; color:#0B2540; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ am.name }}</span>
+            <span style="flex:0 0 auto; display:inline-flex; align-items:center; gap:5px; padding:2px 9px; border-radius:999px; background:rgba(11,60,111,0.07); border:1px solid rgba(11,60,111,0.12); font-size:11px; font-weight:600; color:#0B3C6F;"><span style="width:6px; height:6px; border-radius:50%; background:#1F9D55;"></span>Persona Digital</span>
+          </div>
+          <div style="font-size:12.5px; color:#5B6B82; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ am.fraksi }} · {{ am.komisi }} · {{ am.dapil }}</div>
+        </div>
+      </div>
+    </header>
+
+    <div ref="{{ chatRef }}" class="pa-scroll" style="flex:1 1 auto; overflow-y:auto; padding:24px {{ sz.chPad }};">
+      <div style="max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:16px;">
+        <div style="text-align:center; margin-bottom:4px;">
+          <span style="font-size:11.5px; color:#8A97AB; background:#E9EDF4; padding:5px 12px; border-radius:999px;">Hari ini</span>
+        </div>
+        <sc-for list="{{ messages }}" as="m" hint-placeholder-count="1">
+          <sc-if value="{{ m.isPersona }}" hint-placeholder-val="{{ true }}">
+            <div style="align-self:flex-start; display:flex; gap:11px; align-items:flex-end; max-width:84%;">
+              <div style="width:34px; height:34px; flex:0 0 auto; border-radius:50%; background:linear-gradient(140deg,#0B3C6F,#1E5AA8 60%,#D4AF37 140%); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:12px;">{{ am.ini }}</div>
+              <div style="background:#ffffff; border:1px solid #E6EAF2; border-radius:6px 20px 20px 20px; padding:14px 18px; font-size:14.5px; line-height:1.55; color:#1A2A40; box-shadow:0 10px 24px -16px rgba(11,37,64,0.25);">{{ m.text }}</div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
+            <div style="align-self:flex-end; max-width:84%;">
+              <div style="background:linear-gradient(135deg,#1E5AA8,#0B3C6F); color:#fff; border-radius:20px 6px 20px 20px; padding:14px 18px; font-size:14.5px; line-height:1.55; box-shadow:0 12px 26px -16px rgba(11,60,111,0.6);">{{ m.text }}</div>
+            </div>
+          </sc-if>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:0 0 auto; padding:14px {{ sz.chPad }} 18px; background:linear-gradient(180deg,rgba(243,245,249,0), #F3F5F9 30%); border-top:1px solid #E8ECF3;">
+      <div style="max-width:760px; margin:0 auto; display:flex; align-items:flex-end; gap:10px; background:#fff; border:1px solid #E1E6F0; border-radius:22px; padding:8px 8px 8px 18px; box-shadow:0 14px 36px -22px rgba(11,37,64,0.35);">
+        <input class="pa-chatinput" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" placeholder="Tulis aspirasi Anda…" style="flex:1 1 auto; min-width:0; border:none; outline:none; background:transparent; font-size:14.5px; font-family:inherit; color:#0B2540; padding:9px 0;">
+        <button onClick="{{ send }}" style="flex:0 0 auto; height:42px; padding:0 20px; border:none; border-radius:14px; background:linear-gradient(135deg,#1E5AA8,#0B3C6F); color:#fff; font-weight:700; font-size:14px; font-family:inherit; cursor:pointer; display:flex; align-items:center; gap:7px;">Kirim
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div style="max-width:760px; margin:8px auto 0; text-align:center; font-size:11px; color:#9AA6B8;">Persona Digital resmi · DPRD Kabupaten Sumenep — dioperasikan oleh mataGen.ai</div>
+    </div>
+
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1024},&quot;startView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;chat&quot;],&quot;default&quot;:&quot;home&quot;},&quot;initialMemberId&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:3},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#D4AF37&quot;}}">
+const NAVY = '#0B3C6F', ROYAL = '#1E5AA8', GOLD = '#D4AF37';
+const INTRO = 'Selamat datang. Silakan pilih Anggota DPRD untuk menyalurkan aspirasi Anda terkait tugas, fungsi, aspirasi masyarakat, pokok pikiran, kegiatan, maupun informasi DPRD Kabupaten Sumenep.';
+
+const FRAKSI = ['PKB','Gerindra','PDI-P','NasDem','PPP','Demokrat','Golkar','PAN'];
+const KOMISI = ['Komisi I','Komisi II','Komisi III','Komisi IV'];
+const DAPIL  = ['Dapil 1','Dapil 2','Dapil 3','Dapil 4','Dapil 5','Dapil 6','Dapil 7','Dapil 8'];
+
+const REPLIES = [
+  'Terima kasih atas aspirasi yang Bapak/Ibu sampaikan. Persoalan ini akan saya catat dan saya teruskan dalam rapat {komisi} untuk ditindaklanjuti bersama mitra kerja terkait.',
+  'Saya mengapresiasi masukan ini. Sebagai wakil dari {dapil}, saya berkomitmen mengawal usulan tersebut melalui pokok-pokok pikiran DPRD agar masuk dalam pembahasan anggaran.',
+  'Aspirasi seperti ini sangat penting bagi kami. Mohon sertakan lokasi dan rincian kebutuhannya agar dapat kami verifikasi di lapangan dan kami perjuangkan pada masa sidang berikutnya.',
+  'Baik, akan saya sampaikan kepada Pemerintah Kabupaten melalui mekanisme rapat dengar pendapat. Partisipasi masyarakat seperti inilah yang kami harapkan demi kemajuan Sumenep.'
+];
+
+const DAPIL_AREA = {
+  'Dapil 1': 'Kota Sumenep · Kalianget · Talango · Batuan',
+  'Dapil 2': 'Bluto · Saronggi · Lenteng · Giligenteng',
+  'Dapil 3': 'Guluk-Guluk · Ganding · Pragaan',
+  'Dapil 4': 'Ambunten · Pasongsongan · Rubaru',
+  'Dapil 5': 'Manding · Dasuk · Batuputih',
+  'Dapil 6': 'Batang Batang · Dungkek · Gapura',
+  'Dapil 7': 'Gayam · Nonggunong · Raas · Masalembu',
+  'Dapil 8': 'Arjasa · Sapeken · Kangayan'
+};
+
+const MEMBERS = (function () {
+  const RAW = [
+    ['Rasiidi','PKB','Dapil 1'],
+    ['Agus Hariyanto','Gerindra','Dapil 1'],
+    ['Nia Kurnia','PDI-P','Dapil 1'],
+    ['Sutan Hady Tjahyadi','PDI-P','Dapil 1'],
+    ['Wiwid Harjo Yudanto','PKS','Dapil 1'],
+    ['Musahwi','PAN','Dapil 1'],
+    ['Hairul Anam','PPP','Dapil 1'],
+    ['Akhmadi Yazid','PKB','Dapil 2'],
+    ['Holik','Gerindra','Dapil 2'],
+    ['Eka Bahas Nur Ardiansyah','PDI-P','Dapil 2'],
+    ['Salahuddin','PDI-P','Dapil 2'],
+    ['Samsiyadi','NasDem','Dapil 2'],
+    ['Faisal Muhlis','PAN','Dapil 2'],
+    ['Afrian Mukhlash','Demokrat','Dapil 2'],
+    ['Eksan','PKB','Dapil 3'],
+    ['Irwan Hayat','PKB','Dapil 3'],
+    ['Abd. Rahman','PDI-P','Dapil 3'],
+    ['M. Ramzi','Hanura','Dapil 3'],
+    ['Siti Hosna','PAN','Dapil 3'],
+    ['Akhmad Jazuli','Demokrat','Dapil 3'],
+    ["Moh. Asy'ari Motkhar",'PPP','Dapil 3'],
+    ['Muhammad Mirza Khumaini Hamid','PKB','Dapil 4'],
+    ['H. Zainal','PDI-P','Dapil 4'],
+    ['Ersat','NasDem','Dapil 4'],
+    ['Hairul Anwar','PAN','Dapil 4'],
+    ['Indra Wahyudi','Demokrat','Dapil 4'],
+    ['Abd. Rahman','PPP','Dapil 4'],
+    ['M. Muhri','PKB','Dapil 5'],
+    ['Virzannida','PKB','Dapil 5'],
+    ['Endi','PDI-P','Dapil 5'],
+    ['Afrilia Wahyuni','NasDem','Dapil 5'],
+    ['Moh. Fendi','Demokrat','Dapil 5'],
+    ['Sami Oeddin','PKB','Dapil 6'],
+    ['Umar','PDI-P','Dapil 6'],
+    ['Gunaifi Syarif Arrodi','PAN','Dapil 6'],
+    ['Mulyadi','Demokrat','Dapil 6'],
+    ['Masdawi','Demokrat','Dapil 6'],
+    ['Juhari','PPP','Dapil 6'],
+    ['Saipur Rahman','PKB','Dapil 7'],
+    ['Hosnan','PDI-P','Dapil 7'],
+    ['Darul Hasyim Fath','PDI-P','Dapil 7'],
+    ['Ahmad Juhairi','NasDem','Dapil 7'],
+    ["Mas'ud Ali",'PPP','Dapil 7'],
+    ['Dulsiam','PKB','Dapil 8'],
+    ['Wahyudi','PDI-P','Dapil 8'],
+    ["Muta'em",'NasDem','Dapil 8'],
+    ['Syamsul Bahri','PKS','Dapil 8'],
+    ['Badrul Aini','PBB','Dapil 8'],
+    ['Mohammad Hanafi','Demokrat','Dapil 8'],
+    ['M. Syukri','PPP','Dapil 8']
+  ];
+  const ASSIGN = {
+    23:['Pimpinan','Ketua DPRD'], 50:['Pimpinan','Wakil Ketua DPRD'], 44:['Pimpinan','Wakil Ketua DPRD'], 26:['Pimpinan','Wakil Ketua DPRD'],
+    41:['Komisi I','Ketua Komisi I'], 20:['Komisi I','Wakil Ketua Komisi I'], 39:['Komisi I','Sekretaris Komisi I'], 9:['Komisi I',''], 25:['Komisi I',''], 42:['Komisi I',''], 4:['Komisi I',''], 22:['Komisi I',''], 7:['Komisi I',''],
+    13:['Komisi II','Ketua Komisi II'], 16:['Komisi II','Wakil Ketua Komisi II'], 17:['Komisi II','Sekretaris Komisi II'], 2:['Komisi II',''], 35:['Komisi II',''], 38:['Komisi II',''], 12:['Komisi II',''], 24:['Komisi II',''], 11:['Komisi II',''], 30:['Komisi II',''], 1:['Komisi II',''], 32:['Komisi II',''], 37:['Komisi II',''],
+    28:['Komisi III','Ketua Komisi III'], 45:['Komisi III','Wakil Ketua Komisi III'], 5:['Komisi III','Sekretaris Komisi III'], 6:['Komisi III',''], 43:['Komisi III',''], 27:['Komisi III',''], 46:['Komisi III',''], 48:['Komisi III',''], 10:['Komisi III',''], 40:['Komisi III',''], 8:['Komisi III',''], 15:['Komisi III',''], 14:['Komisi III',''], 49:['Komisi III',''],
+    36:['Komisi IV','Ketua Komisi IV'], 21:['Komisi IV','Wakil Ketua Komisi IV'], 31:['Komisi IV','Sekretaris Komisi IV'], 19:['Komisi IV',''], 47:['Komisi IV',''], 3:['Komisi IV',''], 34:['Komisi IV',''], 18:['Komisi IV',''], 33:['Komisi IV',''], 29:['Komisi IV','']
+  };
+  return RAW.map(function (r, i) {
+    const id = i + 1;
+    const base = r[0];
+    const parts = base.replace(/\./g, '').split(' ').filter(Boolean);
+    const ini = (parts[0][0] + (parts[1] ? parts[1][0] : (parts[0][1] || ''))).toUpperCase();
+    const a = ASSIGN[id] || ['', ''];
+    return { id: id, name: base, ini: ini, fraksi: r[1], komisi: a[0], dapil: r[2], area: DAPIL_AREA[r[2]] || '', jabatan: a[1] };
+  });
+})();
+
+function hx(h, a) {
+  h = h.replace('#', '');
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  const n = parseInt(h, 16);
+  return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+}
+
+class Component extends DCLogic {
+  state = { view: 'home', q: '', fraksi: '', komisi: '', dapil: '', input: '', slide: 0, width: 1200, activeMemberId: null, messages: [] };
+
+  rootRef = (el) => { if (el) { this.rootEl = el; } };
+  chatRef = (el) => { if (el) { this.chatEl = el; } };
+
+  componentDidMount() {
+    this._measure();
+    this._onResize = () => this._measure();
+    window.addEventListener('resize', this._onResize);
+    if (this.props.startView === 'chat') {
+      const id = this.props.initialMemberId ? Number(this.props.initialMemberId) : MEMBERS[2].id;
+      this.setState({ view: 'chat', activeMemberId: id, messages: [{ role: 'persona', text: INTRO }] });
+    }
+    this._timer = setInterval(() => {
+      if (this.state.view !== 'home' || this._paused) return;
+      const sz = this.sizes(this.bp(this.state.width));
+      const visible = Math.max(1, Math.floor(this.state.width / (sz.card + 18)));
+      const max = Math.max(0, 8 - visible);
+      if (max <= 0) return;
+      this.setState(s => ({ slide: s.slide >= max ? 0 : s.slide + 1 }));
+    }, 3600);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    clearInterval(this._timer);
+    clearTimeout(this._reply);
+  }
+  _measure() {
+    const el = this.rootEl;
+    if (el) {
+      const w = el.clientWidth || el.offsetWidth;
+      if (w && w !== this.state.width) this.setState({ width: w });
+    }
+  }
+  _scrollChat() {
+    setTimeout(() => { if (this.chatEl) this.chatEl.scrollTop = this.chatEl.scrollHeight; }, 60);
+  }
+
+  bp(w) { return w >= 1100 ? 'lg' : w >= 760 ? 'md' : 'sm'; }
+  sizes(bp) {
+    if (bp === 'lg') return { hpad: '48px', chPad: '32px', title: '44px', sub: '18px', search: '66px', card: 300, cardCss: '300px', sliderAv: '112px', gridGap: '20px', h2: '24px' };
+    if (bp === 'md') return { hpad: '32px', chPad: '28px', title: '34px', sub: '17px', search: '62px', card: 280, cardCss: '280px', sliderAv: '104px', gridGap: '16px', h2: '22px' };
+    return { hpad: '18px', chPad: '16px', title: '26px', sub: '15px', search: '54px', card: 228, cardCss: '228px', sliderAv: '90px', gridGap: '12px', h2: '19px' };
+  }
+
+  activeMember() { return MEMBERS.find(m => m.id === this.state.activeMemberId) || MEMBERS[2]; }
+
+  onSearch = (e) => this.setState({ q: e.target.value, slide: 0 });
+  onFraksi = (e) => this.setState({ fraksi: e.target.value });
+  onKomisi = (e) => this.setState({ komisi: e.target.value });
+  onDapil  = (e) => this.setState({ dapil: e.target.value });
+  clearFilters = () => this.setState({ fraksi: '', komisi: '', dapil: '', q: '' });
+  sliderEnter = () => { this._paused = true; };
+  sliderLeave = () => { this._paused = false; };
+
+  openChat = (id) => { this.setState({ view: 'chat', activeMemberId: id, messages: [{ role: 'persona', text: INTRO }], input: '' }); this._scrollChat(); };
+  back = () => this.setState({ view: 'home' });
+  onInput = (e) => this.setState({ input: e.target.value });
+  onKey = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.send(); } };
+  send = () => {
+    const text = (this.state.input || '').trim();
+    if (!text) return;
+    this.setState(s => ({ messages: [...s.messages, { role: 'user', text }], input: '' }));
+    this._scrollChat();
+    clearTimeout(this._reply);
+    this._reply = setTimeout(() => {
+      const m = this.activeMember();
+      const idx = this.state.messages.filter(x => x.role === 'user').length % REPLIES.length;
+      let t = REPLIES[(idx + REPLIES.length - 1) % REPLIES.length];
+      t = t.split('{komisi}').join(m.komisi).split('{dapil}').join(m.dapil).split('{name}').join(m.name);
+      this.setState(s => ({ messages: [...s.messages, { role: 'persona', text: t }] }));
+      this._scrollChat();
+    }, 700);
+  };
+
+  renderVals() {
+    const w = this.state.width;
+    const bp = this.bp(w);
+    const sz = this.sizes(bp);
+    const cols = bp === 'lg' ? 4 : bp === 'md' ? 3 : 2;
+    const accent = this.props.accent || GOLD;
+
+    const filtered = MEMBERS.filter(m =>
+      (!this.state.fraksi || m.fraksi === this.state.fraksi) &&
+      (!this.state.komisi || m.komisi === this.state.komisi) &&
+      (!this.state.dapil || m.dapil === this.state.dapil) &&
+      (!this.state.q || m.name.toLowerCase().includes(this.state.q.toLowerCase()))
+    );
+    const deco = (arr) => arr.map(m => ({ ...m, onChat: () => this.openChat(m.id) }));
+
+    const offset = this.state.slide * (sz.card + 18);
+    const messages = this.state.messages.map(m => ({ text: m.text, isPersona: m.role === 'persona', isUser: m.role === 'user' }));
+
+    return {
+      isHome: this.state.view === 'home',
+      isChat: this.state.view === 'chat',
+      sz, bp,
+      gridStyle: 'repeat(' + cols + ',minmax(0,1fr))',
+      infoGrid: 'repeat(' + (bp === 'sm' ? 1 : 2) + ',minmax(0,1fr))',
+      sliderTransform: 'translateX(-' + offset + 'px)',
+      sorotan: deco([23, 50, 44, 26, 41, 13, 28, 36].map(function (id) { return MEMBERS.find(function (m) { return m.id === id; }); })),
+      list: deco(filtered),
+      noResults: filtered.length === 0,
+      resultLabel: filtered.length + ' dari 50 anggota',
+      q: this.state.q,
+      fraksi: this.state.fraksi, komisi: this.state.komisi, dapil: this.state.dapil,
+      input: this.state.input,
+      messages,
+      am: this.activeMember(),
+      accent,
+      aSoft: hx(accent, 0.14),
+      aBorder: hx(accent, 0.35),
+      aBorderStrong: hx(accent, 0.6),
+      btnGrad: 'linear-gradient(135deg,' + hx(accent, 1) + ',' + accent + ')',
+      rootRef: this.rootRef, chatRef: this.chatRef,
+      onSearch: this.onSearch, onFraksi: this.onFraksi, onKomisi: this.onKomisi, onDapil: this.onDapil,
+      clearFilters: this.clearFilters, sliderEnter: this.sliderEnter, sliderLeave: this.sliderLeave,
+      back: this.back, onInput: this.onInput, onKey: this.onKey, send: this.send
+    };
+  }
+}
+</script>
+</body>
+</html>

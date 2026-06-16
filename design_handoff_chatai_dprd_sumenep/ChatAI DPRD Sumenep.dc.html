@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  html,body{ margin:0; background:#E7E9EF; }
+</style>
+</helmet>
+<div style="min-height:100vh; background:radial-gradient(1400px 700px at 20% -10%, #EEF0F5, #E3E6EC 70%); padding:52px 56px 80px; font-family:Inter,system-ui,sans-serif; -webkit-font-smoothing:antialiased; color:#0B2540;">
+  <div style="max-width:2040px; margin:0 auto;">
+
+    <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:24px; flex-wrap:wrap; margin-bottom:8px;">
+      <div>
+        <div style="display:inline-flex; align-items:center; gap:9px; padding:6px 14px; border-radius:999px; background:#fff; border:1px solid #DADFE8; font-size:12px; font-weight:600; color:#1E5AA8; letter-spacing:0.3px;">
+          <span style="width:24px; height:24px; border-radius:50%; background:#fff; border:1px solid #DADFE8; display:flex; align-items:center; justify-content:center; overflow:hidden;"><img src="uploads/Logo_DPRD_Kabupaten_Sumene.jpeg" alt="Logo DPRD Sumenep" style="width:21px; height:21px; object-fit:contain;"></span>
+          HI-FI MOCKUP · PERSONA DIGITAL PLATFORM
+        </div>
+        <h1 style="margin:16px 0 6px; font-size:34px; font-weight:800; letter-spacing:-0.6px; color:#0B2540;">ChatAI DPRD Sumenep</h1>
+        <p style="margin:0; font-size:15px; color:#5B6B82; max-width:680px; line-height:1.5;">Platform Persona Digital 50 Anggota DPRD Kabupaten Sumenep — sisi publik. Empat layar: Beranda &amp; Ruang Percakapan, dalam tampilan desktop dan mobile. Klik kartu untuk memulai percakapan; filter, pencarian, dan slider berfungsi penuh.</p>
+      </div>
+      <div style="display:flex; gap:18px; align-items:center; font-size:12.5px; color:#5B6B82;">
+        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:11px; height:11px; border-radius:3px; background:#0B3C6F;"></span>Navy</span>
+        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:11px; height:11px; border-radius:3px; background:#1E5AA8;"></span>Royal</span>
+        <span style="display:inline-flex; align-items:center; gap:7px;"><span style="width:11px; height:11px; border-radius:3px; background:{{ accent }};"></span>Gold</span>
+      </div>
+    </div>
+
+    <!-- SECTION: HOME -->
+    <div style="margin-top:40px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+        <span style="font-size:13px; font-weight:800; letter-spacing:1.5px; color:#0B3C6F;">01 · BERANDA</span>
+        <span style="flex:1 1 auto; height:1px; background:#D4D9E2;"></span>
+      </div>
+      <div style="display:flex; gap:44px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+          <div style="font-size:12.5px; font-weight:700; color:#5B6B82; margin-bottom:11px; letter-spacing:0.3px;">Desktop · 1440px</div>
+          <div style="width:1440px; border-radius:18px; overflow:hidden; box-shadow:0 50px 110px -50px rgba(13,30,55,0.55); border:1px solid #D2D7E0; background:#fff;">
+            <div style="height:42px; background:#0a213c; display:flex; align-items:center; gap:8px; padding:0 18px;">
+              <span style="width:11px; height:11px; border-radius:50%; background:#ff5f57;"></span>
+              <span style="width:11px; height:11px; border-radius:50%; background:#febc2e;"></span>
+              <span style="width:11px; height:11px; border-radius:50%; background:#28c840;"></span>
+              <div style="margin:0 auto; padding:5px 16px; border-radius:8px; background:rgba(255,255,255,0.10); color:rgba(255,255,255,0.7); font-size:12px;">chat.dprd-sumenep.go.id</div>
+            </div>
+            <dc-import name="Persona App" start-view="home" accent="{{ accent }}" style="display:block; width:100%;" hint-size="1440px,2200px"></dc-import>
+          </div>
+        </div>
+
+        <div style="flex:0 0 auto;">
+          <div style="font-size:12.5px; font-weight:700; color:#5B6B82; margin-bottom:11px; letter-spacing:0.3px;">Mobile · 390px</div>
+          <div style="width:414px; padding:13px; border-radius:54px; background:linear-gradient(150deg,#23252b,#050507); box-shadow:0 50px 100px -34px rgba(13,30,55,0.6);">
+            <div style="position:relative; width:388px; height:812px; border-radius:42px; overflow:hidden; background:#04162a;">
+              <div style="position:absolute; top:11px; left:50%; transform:translateX(-50%); width:118px; height:30px; border-radius:18px; background:#000; z-index:60;"></div>
+              <dc-import name="Persona App" start-view="home" accent="{{ accent }}" style="display:block; width:388px; height:812px;" hint-size="388px,812px"></dc-import>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION: CHAT -->
+    <div style="margin-top:64px;">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+        <span style="font-size:13px; font-weight:800; letter-spacing:1.5px; color:#0B3C6F;">02 · RUANG PERCAKAPAN</span>
+        <span style="flex:1 1 auto; height:1px; background:#D4D9E2;"></span>
+      </div>
+      <div style="display:flex; gap:44px; align-items:flex-start; flex-wrap:wrap;">
+
+        <div style="flex:0 0 auto;">
+          <div style="font-size:12.5px; font-weight:700; color:#5B6B82; margin-bottom:11px; letter-spacing:0.3px;">Desktop · 1440px</div>
+          <div style="width:1440px; border-radius:18px; overflow:hidden; box-shadow:0 50px 110px -50px rgba(13,30,55,0.55); border:1px solid #D2D7E0; background:#fff;">
+            <div style="height:42px; background:#0a213c; display:flex; align-items:center; gap:8px; padding:0 18px;">
+              <span style="width:11px; height:11px; border-radius:50%; background:#ff5f57;"></span>
+              <span style="width:11px; height:11px; border-radius:50%; background:#febc2e;"></span>
+              <span style="width:11px; height:11px; border-radius:50%; background:#28c840;"></span>
+              <div style="margin:0 auto; padding:5px 16px; border-radius:8px; background:rgba(255,255,255,0.10); color:rgba(255,255,255,0.7); font-size:12px;">chat.dprd-sumenep.go.id/percakapan</div>
+            </div>
+            <dc-import name="Persona App" start-view="chat" initial-member-id="23" accent="{{ accent }}" style="display:block; width:100%; height:840px;" hint-size="1440px,840px"></dc-import>
+          </div>
+        </div>
+
+        <div style="flex:0 0 auto;">
+          <div style="font-size:12.5px; font-weight:700; color:#5B6B82; margin-bottom:11px; letter-spacing:0.3px;">Mobile · 390px</div>
+          <div style="width:414px; padding:13px; border-radius:54px; background:linear-gradient(150deg,#23252b,#050507); box-shadow:0 50px 100px -34px rgba(13,30,55,0.6);">
+            <div style="position:relative; width:388px; height:812px; border-radius:42px; overflow:hidden; background:#F3F5F9;">
+              <div style="position:absolute; top:11px; left:50%; transform:translateX(-50%); width:118px; height:30px; border-radius:18px; background:#000; z-index:60;"></div>
+              <dc-import name="Persona App" start-view="chat" initial-member-id="41" accent="{{ accent }}" style="display:block; width:388px; height:812px;" hint-size="388px,812px"></dc-import>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="margin-top:56px; text-align:center; font-size:12.5px; color:#8694A8;">
+      Data anggota bersifat dummy &amp; siap diganti dengan data resmi · Dipersembahkan oleh <span style="color:#0B2540; font-weight:700;">mataGen</span><span style="color:#E5484D; font-weight:700;">.ai</span>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#D4AF37&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent || '#D4AF37';
+    const hx = (h, a) => {
+      h = h.replace('#', '');
+      if (h.length === 3) h = h.split('').map(c => c + c).join('');
+      const n = parseInt(h, 16);
+      return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+    };
+    return { accent, aBorder: hx(accent, 0.4) };
+  }
+}
+</script>
+</body>
+</html>
