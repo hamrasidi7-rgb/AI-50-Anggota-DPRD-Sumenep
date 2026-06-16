@@ -263,10 +263,17 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
             >
               <Image src="/logo.jpeg" alt="Logo DPRD" width={36} height={36} className="object-contain" />
             </div>
-            <div className="font-extrabold text-[17px] tracking-[0.2px] whitespace-nowrap overflow-hidden text-ellipsis">
-              <span className="text-white">Chat</span>
-              <span className="text-dp-red">AI</span>
-              <span className="font-bold" style={{ color: 'rgba(233,240,255,0.92)' }}>&nbsp;DPRD SUMENEP</span>
+            {/* Desktop: satu baris | Mobile: dua baris rata kiri */}
+            <div className="font-extrabold tracking-[0.2px] leading-[1.2]">
+              <div className="text-[14px] md:text-[17px]">
+                <span className="text-white">Chat</span>
+                <span className="text-dp-red">AI</span>
+                <span className="font-bold" style={{ color: 'rgba(233,240,255,0.92)' }}>&nbsp;DPRD</span>
+                <span className="hidden md:inline font-bold" style={{ color: 'rgba(233,240,255,0.92)' }}>&nbsp;SUMENEP</span>
+              </div>
+              <div className="md:hidden text-[14px] font-bold" style={{ color: 'rgba(233,240,255,0.92)' }}>
+                SUMENEP
+              </div>
             </div>
           </div>
 
@@ -298,36 +305,36 @@ export default function HomeView({ q, fraksi, komisi, dapil, onQ, onFraksi, onKo
       <div className="max-w-content mx-auto px-4 md:px-8 lg:px-12 pb-2">
 
         {/* HERO */}
-        <section className="pt-11 pb-1.5 text-center">
+        <section className="pt-7 pb-1.5 text-center">
+          {/* Logo — elegant thin-ring frame */}
           <div className="flex justify-center mb-5">
             <div
-              className="w-[88px] h-[88px] rounded-full bg-white flex items-center justify-center"
-              style={{ boxShadow: '0 22px 50px -18px rgba(0,0,0,0.65)', border: '1px solid rgba(255,255,255,0.55)' }}
+              className="rounded-full bg-white flex items-center justify-center"
+              style={{
+                width: 76, height: 76,
+                border: '1.5px solid rgba(212,175,55,0.45)',
+                boxShadow: '0 0 0 5px rgba(255,255,255,0.05), 0 14px 40px -12px rgba(0,0,0,0.55)',
+              }}
             >
-              <Image src="/logo.jpeg" alt="Logo DPRD Kabupaten Sumenep" width={74} height={74} className="object-contain" />
+              <Image src="/logo.jpeg" alt="Logo DPRD Kabupaten Sumenep" width={62} height={62} className="object-contain" />
             </div>
           </div>
 
-          <div
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-gold-text text-xs font-semibold tracking-[0.4px]"
-            style={{ background: A_SOFT, border: `1px solid ${A_BORDER}` }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: ACCENT }} />
-            PERSONA DIGITAL RESMI · DPRD KABUPATEN SUMENEP
-          </div>
-
           <h1
-            className="mt-5 mb-3 font-extrabold leading-[1.08] tracking-[-0.5px] text-text-hi mx-auto"
+            className="mb-3 font-extrabold leading-[1.08] tracking-[-0.5px] text-text-hi mx-auto"
             style={{ maxWidth: '14ch', fontSize: 'clamp(26px, 4vw, 44px)' }}
           >
             AI 50 Anggota DPRD Sumenep
           </h1>
-          <p className="mx-auto max-w-[560px] leading-relaxed text-[rgba(231,240,255,0.70)]" style={{ fontSize: 'clamp(15px, 1.6vw, 18px)' }}>
+          <p
+            className="mx-auto max-w-[560px] leading-relaxed"
+            style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', color: 'rgba(231,240,255,0.88)' }}
+          >
             Silakan pilih Anggota DPRD untuk menyalurkan aspirasi Anda.
           </p>
 
           {/* Search box */}
-          <div className="mt-7 mx-auto max-w-[680px] relative">
+          <div className="mt-5 mx-auto max-w-[680px] relative">
             <span className="absolute left-[22px] top-1/2 -translate-y-1/2 pointer-events-none">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.5" stroke="rgba(231,240,255,0.6)" strokeWidth="1.8"/><line x1="15.5" y1="15.5" x2="20" y2="20" stroke="rgba(231,240,255,0.6)" strokeWidth="1.8" strokeLinecap="round"/></svg>
             </span>
